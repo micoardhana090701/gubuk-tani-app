@@ -12,14 +12,26 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.futureengineerdev.gubugtani.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_comunity"
+        android:name="com.futureengineerdev.gubugtani.ui.dashboard.ComunityFragment"
+        android:label="@string/title_comunity"
+        tools:layout="@layout/fragment_comunity" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.futureengineerdev.gubugtani.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_pestiside"
+        android:name="com.futureengineerdev.gubugtani.ui.notifications.PestisideFragment"
+        android:label="@string/title_pestiside"
+        tools:layout="@layout/fragment_pestiside" />
+
+    <fragment
+        android:id="@+id/navigation_camera"
+        android:name="com.futureengineerdev.gubugtani.ui.camera.CameraFragment"
+        android:label="@string/title_camera"
+        tools:layout="@layout/fragment_camera" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.futureengineerdev.gubugtani.ui.profile.ProfileFragment"
+        android:label="@string/title_person"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
