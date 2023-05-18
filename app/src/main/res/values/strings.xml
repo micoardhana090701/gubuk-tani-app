@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Gubug Tani</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="company_name">Develope by :\nFuture Engineer Dev</string>
+
+</resources>
