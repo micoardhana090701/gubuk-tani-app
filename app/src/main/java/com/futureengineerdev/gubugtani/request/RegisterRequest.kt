@@ -1,14 +1,8 @@
 package com.futureengineerdev.gubugtani.request
 
-import com.google.gson.annotations.SerializedName
-
-data class RegisterRequest (
-    @SerializedName("name")
-    val name: String?,
-    @SerializedName("username")
-    val username: String?,
-    @SerializedName("email")
-    val email: String?,
-    @SerializedName("password")
-    val password: String?,
+data class RegisterRequest(
+    val name: String,
+    val username: String,
+    val email: String,
+    val password: String,
 )

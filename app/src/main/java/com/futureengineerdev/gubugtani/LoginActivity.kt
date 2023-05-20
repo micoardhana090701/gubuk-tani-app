@@ -51,11 +51,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 if (canLogin()){
                     val email = binding.etEmail.text.toString()
                     val password = binding.etPassword.text.toString()
-                    authViewModel.login(email, password)
+                    authViewModel.loginUser(email, password)
                 }
                 else{
                     Toast.makeText(this, "Check Your Input", Toast.LENGTH_SHORT).show()
                 }
+            }
+            binding.btnRegister->{
+                startActivity(Intent(this, RegisterActivity::class.java))
             }
         }
 
@@ -68,6 +71,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private fun setupView() {
         with(binding) {
             btnLogin.setOnClickListener(this@LoginActivity)
+            btnRegister.setOnClickListener(this@LoginActivity)
         }
     }
 
@@ -80,7 +84,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     startActivity(Intent(this, HomeActivity::class.java))
                 }
                 is Resource.Error ->{
-                    Toast.makeText(this, "Mohon Input Dengan Benar", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                 }
                 else -> {}
             }

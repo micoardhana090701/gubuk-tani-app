@@ -1,22 +1,22 @@
 package com.futureengineerdev.gubugtani.response
 
-data class LoginResponse(
-    val meta: MetaDataLogin,
-    val result: LoginResult
+data class RegisterResponse(
+    val meta: MetaData,
+    val result: RegisterResult
 )
-data class MetaDataLogin(
+data class MetaData(
     val code: Int,
     val status: String,
     val message: String
 )
 
-data class LoginResult(
+data class RegisterResult(
     val access_token: String,
     val token_type: String,
-    val user: UserLogin
+    val user: User
 )
 
-data class UserLogin(
+data class User(
     val id: Int,
     val name: String,
     val email: String,

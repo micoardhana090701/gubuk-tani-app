@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
 
-    private const val BASE_URL = "http://35.247.143.97/api/"
+    private const val BASE_URL = "https://app.gubuktani.com/api/"
 
     private val logginInterceptor = if (BuildConfig.DEBUG){
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)

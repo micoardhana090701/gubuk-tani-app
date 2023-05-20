@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Gubug Tani</string>
+    <string name="app_name">Gubuk Tani</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Beranda</string>
     <string name="title_comunity">Komunitas</string>
