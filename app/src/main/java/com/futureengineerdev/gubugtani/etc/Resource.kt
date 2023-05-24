@@ -1,5 +1,7 @@
 package com.futureengineerdev.gubugtani.etc
 
+import com.futureengineerdev.gubugtani.request.DataItem
+
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
 
     class Success<T>(data: T?): Resource<T>(data)

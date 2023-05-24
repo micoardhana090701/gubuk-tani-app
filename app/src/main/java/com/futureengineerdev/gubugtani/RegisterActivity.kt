@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.futureengineerdev.gubugtani.databinding.ActivityRegisterBinding
 import com.futureengineerdev.gubugtani.etc.Resource
