@@ -3,6 +3,7 @@ package com.futureengineerdev.gubugtani.ui.dashboard
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,17 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.futureengineerdev.gubugtani.article.ArticleAdapter
 import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
+import com.futureengineerdev.gubugtani.database.ArticleImages
+import com.futureengineerdev.gubugtani.database.ArticleImagesDao
+import com.futureengineerdev.gubugtani.database.ImagesAndArticles
 import com.futureengineerdev.gubugtani.databinding.FragmentComunityBinding
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
@@ -33,6 +39,7 @@ class ComunityFragment() : Fragment() {
     private val articleAdapter = ArticleAdapter()
     private lateinit var comunityViewModel: ComunityViewModel
     private lateinit var authViewModel: AuthViewModel
+    private lateinit var articleImagesDao: ArticleImagesDao
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +59,12 @@ class ComunityFragment() : Fragment() {
     }
 
     private fun fetchData() {
+        val articleImagesLiveData: LiveData<List<ImagesAndArticles>> = articleImagesDao.findAll()
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) { comunityViewModel.getArticle() }
+        articleImagesLiveData.observe(viewLifecycleOwner, Observer { articleImagesList ->
+            Log.d("TAG", "fetchData: ${comunityViewModel.getArticleImages()}")
+        })
+
     }
 
     private fun setupView() {

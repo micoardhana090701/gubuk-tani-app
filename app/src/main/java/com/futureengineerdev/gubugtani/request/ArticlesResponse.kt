@@ -1,8 +1,10 @@
 package com.futureengineerdev.gubugtani.request
 
 import android.os.Parcelable
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import com.futureengineerdev.gubugtani.database.Articles
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
@@ -42,23 +44,8 @@ data class Result(
 	val total: Int?
 )
 
-@Parcelize
-@Entity(tableName = "article_images")
-data class ArticleImages(
-	@PrimaryKey(autoGenerate = false)
-	@field:SerializedName("id")
-	val id: Int?,
-	@field:SerializedName("image")
-	val image: String?,
-	@field:SerializedName("article_id")
-	val article_id: Int?,
-	@field:SerializedName("deleted_at")
-	val deleted_at: String?,
-	@field:SerializedName("created_at")
-	val created_at: String?,
-	@field:SerializedName("updated_at")
-	val updated_at: String?
-): Parcelable
+
+
 
 data class Tag(
 	val id: Int?,

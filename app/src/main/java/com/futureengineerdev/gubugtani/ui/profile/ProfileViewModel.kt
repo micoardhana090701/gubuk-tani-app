@@ -9,21 +9,37 @@ import com.futureengineerdev.gubugtani.api.ApiConfig
 import com.futureengineerdev.gubugtani.api.ApiService
 import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
+import com.futureengineerdev.gubugtani.response.ProfileResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ProfileViewModel(preferences: UserPreferences) : ViewModel() {
 
-//    private val profileRepository = ProfileRepository(preferences) // Ganti dengan repository yang sesuai dengan aplikasi Anda
-//    private val _profile = MutableLiveData<Resource<UserProfile>>()
-//    val profile: LiveData<Resource<UserProfile>>
-//        get() = _profile
-//
-//    fun fetchUserProfile(accessToken: String) {
-//        _profile.value = Resource.Loading()
-//        profileRepository.getUserProfile(accessToken) { result ->
-//            _profile.value = result
-//        }
-//    }
+    private val _profileUser = MutableLiveData<ProfileResponse>()
+    val profileUser : LiveData<ProfileResponse> = _profileUser
+
+    suspend fun getProfile(access_token: String){
+        ApiConfig.apiInstance.getProfile(access_token).enqueue(object : Callback<ProfileResponse>{
+            override fun onResponse(
+                call: Call<ProfileResponse>,
+                response: Response<ProfileResponse>
+            ) {
+                if (response.isSuccessful){
+                    val data = response.body()
+                    if (data != null){
+                        _profileUser.postValue(data!!)
+                    }
+                }else{
+                    Log.e("Error: ", "onFailure : ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                Log.d(ContentValues.TAG, "onFailure: ${t.message}")
+            }
+
+        })
+
+    }
 }

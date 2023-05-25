@@ -19,7 +19,7 @@ class ArticleAdapter: PagingDataAdapter<Articles, ArticleAdapter.ArticleViewHold
                 tvJudulArtikel.text = article.title
                 tvDeskripsiSingkatArtikel.text = article.content
                 Glide.with(itemView.context)
-                    .load(if (article.article_images.isNotEmpty()) article.article_images[0].image else R.drawable.null_pict)
+                    .load("https://app.gubuktani.com/storage/public/gubuk-tani-logo.png")
                     .centerCrop()
                     .into(ivGambarArtikel)
             }

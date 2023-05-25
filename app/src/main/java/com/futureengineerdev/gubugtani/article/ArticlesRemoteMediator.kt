@@ -7,6 +7,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.futureengineerdev.gubugtani.api.ApiService
+import com.futureengineerdev.gubugtani.database.ArticleImages
 import com.futureengineerdev.gubugtani.database.Articles
 import com.futureengineerdev.gubugtani.database.ArticlesDatabase
 import com.futureengineerdev.gubugtani.database.RemoteKeys
@@ -33,6 +34,7 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                 remoteKeys?.nextKey?.minus(1)?: STARTING_PAGE_INDEX
             }
+
             LoadType.PREPEND ->{
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 val prevKey = remoteKeys?.prevKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
@@ -46,9 +48,9 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
         }
         try {
             val access_token = "Bearer ${access_token.getUserKey().first()}"
-            val responseData = apiService.getArticles(access_token)
-            val endOfPaginationReached = responseData.result.data.isEmpty()
-            Log.d("ArticlesRemoteMediator", "load: $responseData")
+            val responseData = apiService.getArticles(access_token, page, state.config.pageSize)
+            val endOfPaginationReached = responseData.result.next_page_url == null
+
             articlesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH){
                     articlesDatabase.remoteKeysDao().deleteRemoteKeys()
@@ -57,20 +59,24 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = responseData.result.data.map {
-                    RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
+                    RemoteKeys(
+                        it.id,
+                        prevKey,
+                        nextKey
+                    )
                 }
                 articlesDatabase.remoteKeysDao().insertAll(keys)
-                responseData.result.data.forEach{
+                responseData.result.data.map{ item ->
                     val article = Articles(
-                        it.id,
-                        it.type,
-                        it.title,
-                        it.content,
-                        it.user_id,
-                        it.article_images,
+                        item.id,
+                        item.type,
+                        item.title,
+                        item.content,
+                        item.user_id,
                     )
                     articlesDatabase.articlesDao().insertAll(article)
                 }
+
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception){

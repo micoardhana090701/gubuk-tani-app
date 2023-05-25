@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 
-@Database(entities = [Articles::class, RemoteKeys::class], version = 3, exportSchema = false)
+@Database(entities = [Articles::class, RemoteKeys::class], version = 1, exportSchema = false)
 abstract class ArticlesDatabase: RoomDatabase(){
     abstract fun articlesDao(): ArticlesDao
+    abstract fun articleImagesDao(): ArticleImagesDao
     abstract fun remoteKeysDao(): RemoteKeysDao
 
     companion object {
@@ -19,7 +22,7 @@ abstract class ArticlesDatabase: RoomDatabase(){
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
-                    ArticlesDatabase::class.java, "articles_database"
+                    ArticlesDatabase::class.java, "articles_database",
                 )
                     .fallbackToDestructiveMigration()
                     .build()
