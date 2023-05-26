@@ -25,8 +25,10 @@ interface ArticleImagesDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(articles: ArticleImages)
 
+    @Query("DELETE FROM articles")
+    suspend fun deleteAll(): Int
+
     @Transaction
     @Query("SELECT * FROM articles ORDER BY id DESC")
     fun findAll(): LiveData<List<ArticlesWithImages>>
-
 }

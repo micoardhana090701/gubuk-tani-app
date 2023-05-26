@@ -3,6 +3,7 @@ package com.futureengineerdev.gubugtani.database
 import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.google.gson.annotations.SerializedName
@@ -22,8 +23,13 @@ data class Articles (
     val content: String,
     @field:SerializedName("user_id")
     val user_id: Int,
+    val article_images: ImageList,
 ) : Parcelable
 
+@Parcelize
+data class ImageList(
+    val imageList: List<ArticleImages>
+): Parcelable
 
 @Parcelize
 data class ArticlesWithImages(

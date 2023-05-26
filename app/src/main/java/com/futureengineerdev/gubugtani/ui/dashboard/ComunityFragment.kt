@@ -20,10 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.futureengineerdev.gubugtani.article.ArticleAdapter
 import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
 import com.futureengineerdev.gubugtani.database.ArticleImages
-import com.futureengineerdev.gubugtani.database.ArticleImagesDao
-import com.futureengineerdev.gubugtani.database.ImagesAndArticles
 import com.futureengineerdev.gubugtani.databinding.FragmentComunityBinding
 import com.futureengineerdev.gubugtani.etc.UserPreferences
+import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
 import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +38,6 @@ class ComunityFragment() : Fragment() {
     private val articleAdapter = ArticleAdapter()
     private lateinit var comunityViewModel: ComunityViewModel
     private lateinit var authViewModel: AuthViewModel
-    private lateinit var articleImagesDao: ArticleImagesDao
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,20 +53,11 @@ class ComunityFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewModel()
-        setupView()
+        setupRecyclerView()
     }
 
     private fun fetchData() {
-        val articleImagesLiveData: LiveData<List<ImagesAndArticles>> = articleImagesDao.findAll()
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) { comunityViewModel.getArticle() }
-        articleImagesLiveData.observe(viewLifecycleOwner, Observer { articleImagesList ->
-            Log.d("TAG", "fetchData: ${comunityViewModel.getArticleImages()}")
-        })
-
-    }
-
-    private fun setupView() {
-            setupRecyclerView()
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) { comunityViewModel.getArticleImages() }
     }
 
     private fun setupRecyclerView() {
@@ -88,7 +77,7 @@ class ComunityFragment() : Fragment() {
         comunityViewModel = ViewModelProvider(this, ViewModelArticleFactory(requireContext()))[ComunityViewModel::class.java]
 
         comunityViewModel.getArticle().observe(viewLifecycleOwner){
-            articleAdapter.submitData(lifecycle, it)
+            articleAdapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
         fetchData()
     }

@@ -34,13 +34,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         setupViewModel()
         setupView()
-
-//        btnLogin = findViewById(R.id.btnLogin)
-//        btnRegister = findViewById(R.id.btnRegister)
-//
-//        btnLogin.setOnClickListener{
-//            startActivity(Intent(this, HomeActivity::class.java))
-        }
+    }
 
     override fun onClick(v: View?) {
         when(v){
@@ -59,6 +53,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
+    }
+    override fun onStop() {
+        super.onStop()
+        if(mShouldFinish)
+            finish()
     }
 
     private fun canLogin() =

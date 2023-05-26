@@ -55,6 +55,7 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
                 if (loadType == LoadType.REFRESH){
                     articlesDatabase.remoteKeysDao().deleteRemoteKeys()
                     articlesDatabase.articlesDao().deleteAll()
+                    articlesDatabase.articleImagesDao().deleteAll()
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -73,8 +74,21 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
                         item.title,
                         item.content,
                         item.user_id,
+                        item.article_images
                     )
                     articlesDatabase.articlesDao().insertAll(article)
+
+                    item.article_images.imageList.map { image ->
+                        val articleImages = ArticleImages(
+                            image.id,
+                            image.image,
+                            image.article_id,
+                            image.deleted_at,
+                            image.created_at,
+                            image.updated_at,
+                        )
+                        articlesDatabase.articleImagesDao().insertAll(articleImages)
+                    }
                 }
 
             }
