@@ -21,9 +21,11 @@ class EditText : AppCompatEditText, View.OnTouchListener {
     private lateinit var clearInput: Drawable
     private lateinit var emailInput: Drawable
     private lateinit var passwordInput: Drawable
+    private lateinit var cityInput: Drawable
     private lateinit var usernameInput: Drawable
     private lateinit var borderInput: Drawable
     private var inUsername: Boolean = false
+    private var inCity: Boolean = false
     private var inEmail: Boolean = false
     private var inPassword: Boolean = false
 
@@ -57,13 +59,13 @@ class EditText : AppCompatEditText, View.OnTouchListener {
         inEmail = cons.getBoolean(R.styleable.EditText_email, false)
         inPassword = cons.getBoolean(R.styleable.EditText_password, false)
         inUsername = cons.getBoolean(R.styleable.EditText_username, false)
+        inCity = cons.getBoolean(R.styleable.EditText_city, false)
         borderInput = ContextCompat.getDrawable(context, R.drawable.border_input) as Drawable
         clearInput = ContextCompat.getDrawable(context, R.drawable.baseline_clear_24) as Drawable
-        emailInput =
-            ContextCompat.getDrawable(context, R.drawable.baseline_mail_outline_24) as Drawable
+        emailInput = ContextCompat.getDrawable(context, R.drawable.baseline_mail_outline_24) as Drawable
         passwordInput = ContextCompat.getDrawable(context, R.drawable.baseline_lock_24) as Drawable
-        usernameInput =
-            ContextCompat.getDrawable(context, R.drawable.baseline_person_24) as Drawable
+        usernameInput = ContextCompat.getDrawable(context, R.drawable.baseline_person_24) as Drawable
+        cityInput = ContextCompat.getDrawable(context, R.drawable.baseline_add_home_24) as Drawable
 
         if (inEmail) {
             setButton(startOfTheText = emailInput)
@@ -71,6 +73,8 @@ class EditText : AppCompatEditText, View.OnTouchListener {
             setButton(startOfTheText = passwordInput)
         } else if (inUsername) {
             setButton(startOfTheText = usernameInput)
+        } else if (inCity){
+            setButton(startOfTheText = cityInput)
         }
         setOnTouchListener(this)
 
@@ -170,6 +174,7 @@ class EditText : AppCompatEditText, View.OnTouchListener {
             inEmail -> setButton(startOfTheText = emailInput)
             inPassword -> setButton(startOfTheText = passwordInput)
             inUsername -> setButton(startOfTheText = usernameInput)
+            inCity -> setButton(startOfTheText = cityInput)
             else -> setButton()
         }
     }
@@ -186,6 +191,10 @@ class EditText : AppCompatEditText, View.OnTouchListener {
             )
             inUsername -> setButton(
                 startOfTheText = usernameInput,
+                endOfTheText = clearInput
+            )
+            inCity -> setButton(
+                startOfTheText = cityInput,
                 endOfTheText = clearInput
             )
             else -> setButton(endOfTheText = clearInput)

@@ -1,6 +1,10 @@
 package com.futureengineerdev.gubugtani.response
 
 import com.google.gson.annotations.SerializedName
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 data class UpdateResponse(
 
@@ -26,9 +30,6 @@ data class UpdateMeta(
 data class UpdateUser(
 	@field:SerializedName("city")
 	val city: String,
-
-//	@field:SerializedName("avatar")
-//	val avatar: String,
 
 	@field:SerializedName("name")
 	val name: String,

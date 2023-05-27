@@ -1,6 +1,7 @@
 package com.futureengineerdev.gubugtani.api
 
 import com.futureengineerdev.gubugtani.BuildConfig
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

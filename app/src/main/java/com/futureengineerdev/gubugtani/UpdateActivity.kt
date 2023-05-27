@@ -18,6 +18,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.futureengineerdev.gubugtani.component.CustomAlertDialog
 import com.futureengineerdev.gubugtani.databinding.ActivityUpdateBinding
 import com.futureengineerdev.gubugtani.databinding.FragmentProfileBinding
@@ -25,13 +26,24 @@ import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
+import com.futureengineerdev.gubugtani.etc.reduceFileImage
 import com.futureengineerdev.gubugtani.etc.uriToFile
 import com.futureengineerdev.gubugtani.response.UpdateUser
+import com.futureengineerdev.gubugtani.ui.profile.ProfileFragment
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
 import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class UpdateActivity : AppCompatActivity(){
@@ -49,6 +61,8 @@ class UpdateActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         _binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.hide()
 
         lifecycleScope.launch{
             setupViewModel()
@@ -75,48 +89,104 @@ class UpdateActivity : AppCompatActivity(){
         }
 
         binding.ivFotoUpdate.setOnClickListener{
-            customAlertDialog.showDialog(
-                cameraButtonClickListener = {
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    intent.resolveActivity(packageManager)
+            val alertDialogBuilder = AlertDialog.Builder(this)
+            alertDialogBuilder.setTitle("Judul Dialog")
+            alertDialogBuilder.setMessage("Pesan dialog.")
+            alertDialogBuilder.setIcon(R.drawable.baseline_image_24)
 
-                    createCustomTempFile(application).also{
-                        val photoURI: Uri = FileProvider.getUriForFile(
-                            this@UpdateActivity,
-                            "com.futureengineerdev.gubugtani.filefotoprofile",
-                            it
-                        )
-                        currentPhotoPath = it.absolutePath
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        inCamera.launch(intent)
-                    }
-                },
-                galeryButtonClickListener = {
-                    val intent = Intent()
+            alertDialogBuilder.setPositiveButton("Camera") { dialogInterface: DialogInterface, i: Int ->
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                intent.resolveActivity(packageManager)
+                createCustomTempFile(application).also {
+                    val photoURI : Uri = FileProvider.getUriForFile(
+                        this.applicationContext,
+                        "com.futureengineerdev.gubugtani.fileprovider",
+                        it
+                    )
+                    currentPhotoPath = it.absolutePath
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    inCamera.launch(intent)
+                }
+                dialogInterface.dismiss()
+            }
+
+            alertDialogBuilder.setNegativeButton("Galeri") { dialogInterface: DialogInterface, i: Int ->
+                val intent = Intent()
                     intent.action = Intent.ACTION_GET_CONTENT
                     intent.type = "image/*"
                     val chooser = Intent.createChooser(intent, "Pilih Gambar")
                     inGalery.launch(chooser)
-                }
-            )
+                dialogInterface.dismiss()
+            }
+
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+
+        }
+        getUserDefault()
+        binding.btnSendUpdate.setOnClickListener{
+            CoroutineScope(Dispatchers.IO).launch {
+                uploadAll()
+            }
         }
 
-        binding.btnSendUpdate.setOnClickListener{
-            val city = binding.etCityUpdate.text.toString()
-            val name = binding.etNamaUpdate.text.toString()
-            val email = binding.etUpdateEmail.text.toString()
-            val username = binding.etUsernameUpdate.text.toString()
-            if (name.isNotEmpty()&&username.isNotEmpty()){
-                lifecycleScope.launch {
-                    profileViewModel.updateProfile(city, name, email, username)
-                }
-            }
-            else{
-                Toast.makeText(this, "ProfileTerupdate", Toast.LENGTH_SHORT).show()
-            }
-        }
 
     }
+
+    private suspend fun getUserDefault(){
+        val pref = UserPreferences.getInstance(dataStore)
+        val viewModelFactory = ViewModelFactory(pref)
+        viewModelFactory.setApplication(application)
+
+        authViewModel = ViewModelProvider(this, ViewModelFactory(pref))[AuthViewModel::class.java]
+        profileViewModel = ViewModelProvider(this, viewModelFactory)[ProfileViewModel::class.java]
+
+        val accessToken = pref.getUserKey().first()
+
+        profileViewModel.getProfile(access_token = "Bearer $accessToken")
+        profileViewModel.profileUser.observe(this){
+            if (it != null){
+                binding.etNamaUpdate.setText(it.result.user.name)
+                binding.etUsernameUpdate.setText(it.result.user.username)
+                val ivFotoProfile = binding.ivFotoUpdate
+                Glide.with(this)
+                    .load("https://app.gubuktani.com/storage/" + it.result.user.avatar)
+                    .centerCrop()
+                    .into(ivFotoProfile)
+            }
+        }
+    }
+
+    private suspend fun uploadAll() {
+        if (getFile != null) {
+            val file = reduceFileImage(getFile as File)
+            val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+            val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+            val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+
+            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                "avatar",
+                file.name,
+                requestImageFile
+            )
+            CoroutineScope(Dispatchers.IO).launch {
+                profileViewModel.updateAll(imageMultipart=imageMultipart, username=username, name=name, city=city)
+            }
+            finish()
+        } else{
+            val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+            val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+            val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+            CoroutineScope(Dispatchers.IO).launch {
+                profileViewModel.updateData(username=username, name=name, city=city)
+            }
+            finish()
+        }
+    }
+
+
+
     private val inCamera = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ){

@@ -10,12 +10,15 @@ import com.futureengineerdev.gubugtani.response.RegisterResponse
 import com.futureengineerdev.gubugtani.response.UpdateMeta
 import com.futureengineerdev.gubugtani.response.UpdateResponse
 import com.futureengineerdev.gubugtani.response.UpdateUser
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
-import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
@@ -27,11 +30,25 @@ interface ApiService {
     fun getProfile(
         @Header("Authorization") access_token: String,
     ): Call<ProfileResponse>
+
+    @Multipart
     @POST("profile")
-    suspend fun updateProfile(
+    suspend fun updateAll(
         @Header("Authorization") access_token: String,
-        @Body requestBody: UpdateUser
-    ): Call<UpdateResponse>
+        @Part avatar: MultipartBody.Part?,
+        @Part("username") username: RequestBody,
+        @Part("name") name: RequestBody,
+        @Part("city") city: RequestBody,
+    ): UpdateResponse
+
+    @Multipart
+    @POST("profile")
+    suspend fun updateData(
+        @Header("Authorization") access_token: String,
+        @Part("username") username: RequestBody,
+        @Part("name") name: RequestBody,
+        @Part("city") city: RequestBody,
+    ): UpdateResponse
 
     @GET("article")
     suspend fun getArticles(
