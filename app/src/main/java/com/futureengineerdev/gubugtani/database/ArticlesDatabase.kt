@@ -4,12 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
-import com.futureengineerdev.gubugtani.article.ArticleConverter
 
-@Database(entities = [Articles::class, ArticleImages::class, RemoteKeys::class], version = 2, exportSchema = false)
-@TypeConverters(ArticleConverter::class)
+@Database(entities = [Articles::class, ArticleImages::class, RemoteKeys::class], version = 1, exportSchema = false)
 abstract class ArticlesDatabase: RoomDatabase(){
     abstract fun articlesDao(): ArticlesDao
     abstract fun articleImagesDao(): ArticleImagesDao

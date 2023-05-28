@@ -28,6 +28,7 @@ import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
 import com.futureengineerdev.gubugtani.etc.reduceFileImage
 import com.futureengineerdev.gubugtani.etc.uriToFile
+import com.futureengineerdev.gubugtani.response.ProfileResponse
 import com.futureengineerdev.gubugtani.response.UpdateUser
 import com.futureengineerdev.gubugtani.ui.profile.ProfileFragment
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
@@ -81,6 +82,7 @@ class UpdateActivity : AppCompatActivity(){
         profileViewModel.updateUser.observe(this){
             if (it != null){
                 Toast.makeText(this, "Akun Telah di Update", Toast.LENGTH_SHORT).show()
+                showLoadingUpdate(true)
             }
         }
 
@@ -173,6 +175,7 @@ class UpdateActivity : AppCompatActivity(){
             CoroutineScope(Dispatchers.IO).launch {
                 profileViewModel.updateAll(imageMultipart=imageMultipart, username=username, name=name, city=city)
             }
+            showLoadingUpdate(false)
             finish()
         } else{
             val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
@@ -210,5 +213,9 @@ class UpdateActivity : AppCompatActivity(){
             binding.ivFotoUpdate.setImageURI(setImage)
             getFile = myFile
         }
+    }
+    private fun showLoadingUpdate(isLoadingUpdate: Boolean){
+        binding.isLoadingUpdating.visibility = if (isLoadingUpdate) View.VISIBLE else View.GONE
+        binding.btnSendUpdate.isEnabled = !isLoadingUpdate
     }
 }

@@ -1,5 +1,6 @@
 package com.futureengineerdev.gubugtani.article
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.futureengineerdev.gubugtani.R
+import com.futureengineerdev.gubugtani.database.ArticleImages
 import com.futureengineerdev.gubugtani.database.Articles
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.databinding.ItemArtikelBinding
@@ -20,16 +22,20 @@ class ArticleAdapter : PagingDataAdapter<ArticlesWithImages, ArticleAdapter.Arti
             with(binding) {
                 tvJudulArtikel.text = article.articles.title
                 tvDeskripsiSingkatArtikel.text = article.articles.content
-
-                val loadImageArticles = if (article.articleImages.isNotEmpty()) {
-                    article.articleImages[0].image
-                } else {
-                    R.drawable.null_pict
+                val firstImageDisplay = article.article_images
+                val loadImageArticles = firstImageDisplay[0].image
+                if (loadImageArticles == "null") {
+                    Glide.with(itemView.context)
+                        .load("https://app.gubuktani.com/storage/public/gubuk-tani-logo.png")
+                        .centerCrop()
+                        .into(ivGambarArtikel)
                 }
-                Glide.with(itemView.context)
-                    .load(loadImageArticles)
-                    .centerCrop()
-                    .into(ivGambarArtikel)
+                else{
+                    Glide.with(itemView.context)
+                        .load("https://app.gubuktani.com/storage/$loadImageArticles")
+                        .centerCrop()
+                        .into(ivGambarArtikel)
+                }
             }
         }
     }
@@ -45,6 +51,7 @@ class ArticleAdapter : PagingDataAdapter<ArticlesWithImages, ArticleAdapter.Arti
             holder.bind(article)
         }
     }
+
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ArticlesWithImages>() {

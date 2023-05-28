@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.futureengineerdev.gubugtani.LoginActivity
+import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.UpdateActivity
 import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
 import com.futureengineerdev.gubugtani.databinding.FragmentProfileBinding
@@ -71,6 +72,15 @@ class ProfileFragment : Fragment() {
                 val ivFotoProfile = binding.ivFotoProfil
                 Glide.with(view.context)
                     .load("https://app.gubuktani.com/storage/" + it.result.user.avatar)
+                    .centerCrop()
+                    .into(ivFotoProfile)
+            }
+            else{
+                val ivFotoProfile = binding.ivFotoProfil
+                binding.tvEmail.setText(it?.result?.user?.email)
+                binding.tvUsername.setText(it?.result?.user?.username)
+                Glide.with(view.context)
+                    .load(R.drawable.null_pict)
                     .centerCrop()
                     .into(ivFotoProfile)
             }

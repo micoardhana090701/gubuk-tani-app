@@ -77,14 +77,22 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         authViewModel.authInfo.observe(this){
             when(it){
                 is Resource.Success ->{
+                    showLoading(false)
                     startActivity(Intent(this, HomeActivity::class.java))
+                    mShouldFinish = true
                 }
+                is Resource.Loading -> showLoading(true)
                 is Resource.Error ->{
                     Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                    showLoading(false)
                 }
                 else -> {}
             }
         }
+    }
+    private fun showLoading(isLoadingLogin: Boolean){
+        binding.isLoadingLogin.visibility = if (isLoadingLogin) View.VISIBLE else View.GONE
+        binding.btnRegister.isEnabled = !isLoadingLogin
     }
 
 }

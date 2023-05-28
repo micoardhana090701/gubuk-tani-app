@@ -16,7 +16,6 @@ import com.futureengineerdev.gubugtani.etc.UserPreferences
 
 class ComunityViewModel(private val repository: ArticleRepository) : ViewModel() {
 
-    fun getArticle(): LiveData<PagingData<ArticlesWithImages>> = repository.getArticle().cachedIn(viewModelScope).asLiveData()
-    fun getArticleImages(): LiveData<List<ArticlesWithImages>> = repository.getArticleImages()
+    fun getArticle(): LiveData<PagingData<ArticlesWithImages>> = repository.getArticle().cachedIn(viewModelScope)
 
 }

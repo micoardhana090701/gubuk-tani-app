@@ -56,10 +56,6 @@ class ComunityFragment() : Fragment() {
         setupRecyclerView()
     }
 
-    private fun fetchData() {
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) { comunityViewModel.getArticleImages() }
-    }
-
     private fun setupRecyclerView() {
         with(binding.rvArticle){
             setHasFixedSize(true)
@@ -77,9 +73,10 @@ class ComunityFragment() : Fragment() {
         comunityViewModel = ViewModelProvider(this, ViewModelArticleFactory(requireContext()))[ComunityViewModel::class.java]
 
         comunityViewModel.getArticle().observe(viewLifecycleOwner){
-            articleAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+            CoroutineScope(Dispatchers.IO).launch {
+                articleAdapter.submitData(it)
+            }
         }
-        fetchData()
     }
 
     override fun onDestroyView() {

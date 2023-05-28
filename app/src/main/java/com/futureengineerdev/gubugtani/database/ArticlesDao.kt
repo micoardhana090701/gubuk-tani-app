@@ -17,7 +17,7 @@ interface ArticlesDao {
     @Query("DELETE FROM articles")
     suspend fun deleteAll(): Int
     @Query("SELECT * FROM articles ORDER BY id DESC")
-    fun findAll(): PagingSource<Int, Articles>
+    fun findAll(): PagingSource<Int, ArticlesWithImages>
 }
 @Dao
 interface ArticleImagesDao{

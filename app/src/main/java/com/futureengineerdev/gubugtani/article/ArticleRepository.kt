@@ -19,48 +19,16 @@ import kotlinx.coroutines.flow.map
 
 class ArticleRepository (private val articlesDatabase: ArticlesDatabase, private val apiService: ApiService, private val access_token: UserPreferences){
 
-//    fun getArticle() : LiveData<PagingData<Articles>> {
-//        @OptIn(ExperimentalPagingApi::class)
-//        return Pager(
-//            config = PagingConfig(
-//                pageSize = 5
-//            ),
-//            remoteMediator = ArticlesRemoteMediator(articlesDatabase, apiService, access_token),
-//            pagingSourceFactory = {
-//                articlesDatabase.articlesDao().findAll()
-//            }
-//        ).liveData
-//    }
-
-    @OptIn(ExperimentalPagingApi::class)
-    fun getArticle(): Flow<PagingData<ArticlesWithImages>> {
+    fun getArticle() : LiveData<PagingData<ArticlesWithImages>> {
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
+            config = PagingConfig(
+                pageSize = 5
+            ),
             remoteMediator = ArticlesRemoteMediator(articlesDatabase, apiService, access_token),
-            pagingSourceFactory = { articlesDatabase.articlesDao().findAll() }
-        ).flow.map { pagingData ->
-            pagingData.map { articles ->
-                ArticlesWithImages(
-                    articles = articles,
-                    articleImages = articles.article_images.imageList
-                )
+            pagingSourceFactory = {
+                articlesDatabase.articlesDao().findAll()
             }
-        }
+        ).liveData
     }
-    fun getArticleImages(): LiveData<List<ArticlesWithImages>> {
-        return articlesDatabase.articleImagesDao().findAll()
-    }
-
-//    fun getArticleImage() : LiveData<PagingData<ArticlesWithImages>> {
-//        @OptIn(ExperimentalPagingApi::class)
-//        return Pager(
-//            config = PagingConfig(
-//                pageSize = 5
-//            ),
-//            remoteMediator = ArticlesRemoteMediator(articlesDatabase, apiService, access_token),
-//            pagingSourceFactory = {
-//                articlesDatabase.articlesDao().findAll()
-//            }
-//        ).liveData
-//    }
 }

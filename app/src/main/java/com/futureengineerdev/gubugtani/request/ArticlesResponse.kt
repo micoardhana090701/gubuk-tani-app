@@ -1,13 +1,7 @@
 package com.futureengineerdev.gubugtani.request
 
-import android.os.Parcelable
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.Relation
-import com.futureengineerdev.gubugtani.database.Articles
+import com.futureengineerdev.gubugtani.database.ArticlesResponseData
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
 
 data class ArticlesResponse(
@@ -30,7 +24,7 @@ data class Result(
 	@field:SerializedName("current_page")
 	val current_page: Int?,
 	@field:SerializedName("data")
-	val data: List<Articles>,
+	val data: List<ArticlesResponseData>,
 	val first_page_url: String?,
 	val from: Int?,
 	val last_page: Int?,

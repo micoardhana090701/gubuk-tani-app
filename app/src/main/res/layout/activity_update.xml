@@ -46,9 +46,15 @@
             android:padding="10dp"
             android:background="@drawable/button_solid"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
+    <ProgressBar
+        android:id="@+id/isLoadingUpdating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <com.futureengineerdev.gubugtani.component.EditText
         android:id="@+id/etNamaUpdate"
         android:layout_width="match_parent"

@@ -10,12 +10,18 @@ import com.futureengineerdev.gubugtani.api.ApiService
 import com.futureengineerdev.gubugtani.database.ArticleImages
 import com.futureengineerdev.gubugtani.database.Articles
 import com.futureengineerdev.gubugtani.database.ArticlesDatabase
+import com.futureengineerdev.gubugtani.database.ArticlesResponseData
+import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.database.RemoteKeys
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalPagingApi::class)
-class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, private val apiService: ApiService, private val access_token: UserPreferences): RemoteMediator<Int, Articles>() {
+class ArticlesRemoteMediator(
+    private val articlesDatabase: ArticlesDatabase,
+    private val apiService: ApiService,
+    private val access_token: UserPreferences): RemoteMediator<Int, ArticlesWithImages>()
+{
 
     private companion object{
         const val STARTING_PAGE_INDEX = 1
@@ -27,7 +33,7 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, Articles>
+        state: PagingState<Int, ArticlesWithImages>
     ): MediatorResult {
         val page = when(loadType){
             LoadType.REFRESH -> {
@@ -55,7 +61,6 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
                 if (loadType == LoadType.REFRESH){
                     articlesDatabase.remoteKeysDao().deleteRemoteKeys()
                     articlesDatabase.articlesDao().deleteAll()
-                    articlesDatabase.articleImagesDao().deleteAll()
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -74,11 +79,10 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
                         item.title,
                         item.content,
                         item.user_id,
-                        item.article_images
                     )
                     articlesDatabase.articlesDao().insertAll(article)
 
-                    item.article_images.imageList.map { image ->
+                    item.article_images.map { image ->
                         val articleImages = ArticleImages(
                             image.id,
                             image.image,
@@ -99,21 +103,21 @@ class ArticlesRemoteMediator(private val articlesDatabase: ArticlesDatabase, pri
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Articles>): RemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, ArticlesWithImages>): RemoteKeys? {
         return state.pages.lastOrNull(){it.data.isNotEmpty()}?.data?.lastOrNull()?.let { article ->
-            articlesDatabase.remoteKeysDao().getRemoteKeysId(article.id)
+            articlesDatabase.remoteKeysDao().getRemoteKeysId(article.articles.id)
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Articles>): RemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, ArticlesWithImages>): RemoteKeys? {
         return state.pages.firstOrNull{it.data.isNotEmpty()}?.data?.firstOrNull()?.let { article ->
-            articlesDatabase.remoteKeysDao().getRemoteKeysId(article.id)
+            articlesDatabase.remoteKeysDao().getRemoteKeysId(article.articles.id)
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, Articles>): RemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, ArticlesWithImages>): RemoteKeys? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.id?.let { articleId ->
+            state.closestItemToPosition(position)?.articles?.id?.let { articleId ->
                 articlesDatabase.remoteKeysDao().getRemoteKeysId(articleId)
             }
         }

@@ -1,8 +1,10 @@
 package com.futureengineerdev.gubugtani.api
 
+import com.futureengineerdev.gubugtani.database.ArticlesResponseData
 import com.futureengineerdev.gubugtani.request.ArticlesResponse
 import com.futureengineerdev.gubugtani.request.LoginRequest
 import com.futureengineerdev.gubugtani.request.RegisterRequest
+import com.futureengineerdev.gubugtani.request.ShowArticles
 import com.futureengineerdev.gubugtani.response.LoginResponse
 import com.futureengineerdev.gubugtani.response.ProfileResponse
 

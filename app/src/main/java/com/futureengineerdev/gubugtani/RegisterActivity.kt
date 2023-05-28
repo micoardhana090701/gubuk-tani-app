@@ -48,14 +48,21 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 is Resource.Success -> {
                     Toast.makeText(this, "akun berhasil di buat", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginActivity::class.java))
+                    showLoadingRegister(false)
                     finishAffinity()
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> showLoadingRegister(true)
                 is Resource.Error -> {
                     Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                    showLoadingRegister(false)
                 }
             }
         }
+    }
+
+    private fun showLoadingRegister(isLoadingRegister: Boolean) {
+        binding.isLoadingRegister.visibility = if (isLoadingRegister) View.VISIBLE else View.GONE
+        binding.btnDaftar.isEnabled = !isLoadingRegister
     }
 
     override fun onClick(v: View?) {

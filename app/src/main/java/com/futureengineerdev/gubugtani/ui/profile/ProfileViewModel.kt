@@ -50,20 +50,6 @@ class ProfileViewModel(private val preferences: UserPreferences) : ViewModel() {
         })
 
     }
-//    private val _message = MutableLiveData<String>()
-//    val message:LiveData<String> = _message
-//
-//    fun updateProfilPicture(token: String, avatar: MultipartBody.Part){
-//        viewModelScope.launch {
-//            repository.updateProfilPicture(token, avatar).let{
-//                if (it.isSuccessful){
-//                    _message.value = "Berhasil merubah gambar"
-//                }else {
-//                    _message.value = "Gagal merubah gambar"
-//                }
-//            }
-//        }
-//    }
 
     suspend fun updateAll(
         imageMultipart: MultipartBody.Part,

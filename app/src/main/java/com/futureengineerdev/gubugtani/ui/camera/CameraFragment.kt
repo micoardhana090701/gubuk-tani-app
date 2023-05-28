@@ -1,7 +1,9 @@
 package com.futureengineerdev.gubugtani.ui.camera
 
+import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +16,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.databinding.FragmentCameraBinding
@@ -53,6 +57,16 @@ class CameraFragment : Fragment(), View.OnClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSION
+            )
+        }
+    }
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun setupView() {
@@ -123,5 +137,9 @@ class CameraFragment : Fragment(), View.OnClickListener{
                 binding.ivFotoUploadDeteksi.setImageBitmap(fix)
             }
         }
+    }
+    companion object {
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val REQUEST_CODE_PERMISSION = 10
     }
 }
