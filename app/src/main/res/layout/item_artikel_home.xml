@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="150dp"
-    android:layout_height="wrap_content"
+    android:layout_height="220dp"
     android:layout_margin="@dimen/margin_start_end"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="7dp"
@@ -15,12 +15,14 @@
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:src="@drawable/null_pict"
-            android:scaleType="center"/>
+            android:scaleType="centerCrop"/>
         <TextView
             android:id="@+id/tvJudulArtikelHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_big"
             android:text="@string/dummy_penyakit"
             android:layout_margin="@dimen/margin_start_end"/>
     </LinearLayout>

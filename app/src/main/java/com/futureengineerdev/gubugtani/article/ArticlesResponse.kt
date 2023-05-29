@@ -1,6 +1,8 @@
-package com.futureengineerdev.gubugtani.request
+package com.futureengineerdev.gubugtani.article
 
 import com.futureengineerdev.gubugtani.database.ArticlesResponseData
+import com.futureengineerdev.gubugtani.article.Meta
+import com.futureengineerdev.gubugtani.article.Result
 import com.google.gson.annotations.SerializedName
 
 

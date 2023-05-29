@@ -32,10 +32,11 @@ import kotlinx.coroutines.launch
 class ComunityFragment() : Fragment() {
 
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
+
     private var _binding: FragmentComunityBinding? = null
     private val binding get() = _binding!!
     private val articleAdapter = ArticleAdapter()
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
     private lateinit var comunityViewModel: ComunityViewModel
     private lateinit var authViewModel: AuthViewModel
 

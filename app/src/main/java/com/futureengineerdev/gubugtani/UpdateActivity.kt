@@ -132,7 +132,6 @@ class UpdateActivity : AppCompatActivity(){
             }
         }
 
-
     }
 
     private suspend fun getUserDefault(){
@@ -151,10 +150,18 @@ class UpdateActivity : AppCompatActivity(){
                 binding.etNamaUpdate.setText(it.result.user.name)
                 binding.etUsernameUpdate.setText(it.result.user.username)
                 val ivFotoProfile = binding.ivFotoUpdate
-                Glide.with(this)
-                    .load("https://app.gubuktani.com/storage/" + it.result.user.avatar)
-                    .centerCrop()
-                    .into(ivFotoProfile)
+                if (it.result.user.avatar == null){
+                    Glide.with(this)
+                        .load(R.drawable.baseline_account_circle_24)
+                        .centerCrop()
+                        .into(ivFotoProfile)
+                }
+                else{
+                    Glide.with(this)
+                        .load("https://app.gubuktani.com/storage/" + it.result.user.avatar)
+                        .centerCrop()
+                        .into(ivFotoProfile)
+                }
             }
         }
     }

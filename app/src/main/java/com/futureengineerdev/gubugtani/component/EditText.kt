@@ -205,7 +205,6 @@ class EditText : AppCompatEditText, View.OnTouchListener {
         val pattern: Pattern = Patterns.EMAIL_ADDRESS
         return pattern.matcher(this).matches()
     }
-
 }
 
 

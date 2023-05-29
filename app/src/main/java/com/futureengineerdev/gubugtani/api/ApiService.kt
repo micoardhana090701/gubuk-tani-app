@@ -1,17 +1,13 @@
 package com.futureengineerdev.gubugtani.api
 
-import com.futureengineerdev.gubugtani.database.ArticlesResponseData
-import com.futureengineerdev.gubugtani.request.ArticlesResponse
+import com.futureengineerdev.gubugtani.article.ArticlesResponse
 import com.futureengineerdev.gubugtani.request.LoginRequest
 import com.futureengineerdev.gubugtani.request.RegisterRequest
-import com.futureengineerdev.gubugtani.request.ShowArticles
 import com.futureengineerdev.gubugtani.response.LoginResponse
 import com.futureengineerdev.gubugtani.response.ProfileResponse
 
 import com.futureengineerdev.gubugtani.response.RegisterResponse
-import com.futureengineerdev.gubugtani.response.UpdateMeta
 import com.futureengineerdev.gubugtani.response.UpdateResponse
-import com.futureengineerdev.gubugtani.response.UpdateUser
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call

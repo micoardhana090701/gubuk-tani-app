@@ -2,15 +2,17 @@ package com.futureengineerdev.gubugtani.response
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import com.futureengineerdev.gubugtani.response.Meta
+import com.futureengineerdev.gubugtani.response.Result
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
 data class ProfileResponse(
 
-	@field:SerializedName("result")
+    @field:SerializedName("result")
 	val result: Result,
 
-	@field:SerializedName("meta")
+    @field:SerializedName("meta")
 	val meta: Meta
 ) : Parcelable
 
@@ -77,7 +79,6 @@ data class User(
 
 @Parcelize
 data class Result(
-
 	@field:SerializedName("user")
 	val user: User
 ) : Parcelable

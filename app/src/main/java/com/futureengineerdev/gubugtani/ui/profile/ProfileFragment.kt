@@ -70,17 +70,25 @@ class ProfileFragment : Fragment() {
                 binding.tvEmail.setText(it.result.user.email)
                 binding.tvUsername.setText(it.result.user.username)
                 val ivFotoProfile = binding.ivFotoProfil
-                Glide.with(view.context)
-                    .load("https://app.gubuktani.com/storage/" + it.result.user.avatar)
-                    .centerCrop()
-                    .into(ivFotoProfile)
+                if (it.result.user.avatar == null){
+                    Glide.with(view.context)
+                        .load(R.drawable.baseline_account_circle_24)
+                        .centerCrop()
+                        .into(ivFotoProfile)
+                }
+                else{
+                    Glide.with(view.context)
+                        .load("https://app.gubuktani.com/storage/" + it.result.user.avatar)
+                        .centerCrop()
+                        .into(ivFotoProfile)
+                }
             }
             else{
                 val ivFotoProfile = binding.ivFotoProfil
                 binding.tvEmail.setText(it?.result?.user?.email)
                 binding.tvUsername.setText(it?.result?.user?.username)
                 Glide.with(view.context)
-                    .load(R.drawable.null_pict)
+                    .load(R.drawable.baseline_account_circle_24)
                     .centerCrop()
                     .into(ivFotoProfile)
             }
