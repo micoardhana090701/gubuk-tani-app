@@ -37,6 +37,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     private fun setupView() {
         with(binding){
             btnDaftar.setOnClickListener(this@RegisterActivity)
+            btnBatal.setOnClickListener(this@RegisterActivity)
         }
     }
 
@@ -89,6 +90,10 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 } else{
                     Toast.makeText(this, "Check Your Input", Toast.LENGTH_SHORT).show()
                 }
+            }
+            binding.btnBatal ->{
+                startActivity(Intent(this, LoginActivity::class.java))
+                finishAffinity()
             }
         }
     }

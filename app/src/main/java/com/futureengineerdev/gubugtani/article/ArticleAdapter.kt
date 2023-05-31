@@ -15,6 +15,10 @@ import com.futureengineerdev.gubugtani.database.ArticleImages
 import com.futureengineerdev.gubugtani.database.Articles
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.databinding.ItemArtikelBinding
+import okhttp3.internal.http.toHttpDateOrNull
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class ArticleAdapter : PagingDataAdapter<ArticlesWithImages, ArticleAdapter.ArticleViewHolder>(DIFF_CALLBACK) {
 
@@ -24,6 +28,7 @@ class ArticleAdapter : PagingDataAdapter<ArticlesWithImages, ArticleAdapter.Arti
             with(binding) {
                 tvJudulArtikel.text = article.articles.title
                 tvDeskripsiSingkatArtikel.text = article.articles.content
+                tvWaktuPosting.setText(getTimeAgo(article))
                 val firstImageDisplay = article.article_images
                 val loadImageArticles = firstImageDisplay[0].image
                 if (loadImageArticles != null) {
@@ -58,7 +63,28 @@ class ArticleAdapter : PagingDataAdapter<ArticlesWithImages, ArticleAdapter.Arti
             holder.bind(article)
         }
     }
+    fun getTimeAgo(article: ArticlesWithImages): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val currentTime = System.currentTimeMillis()
+        val uploadTime = dateFormat.parse(article.articles.created_at)?.time ?: currentTime
 
+        val timeDiff = currentTime - uploadTime
+        val seconds = timeDiff / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+        val months = days / 30
+        val years = months / 12
+
+        return when {
+            years > 0 -> "$years tahun yang lalu"
+            months > 0 -> "$months bulan yang lalu"
+            days > 0 -> "$days hari yang lalu"
+            hours > 0 -> "$hours jam yang lalu"
+            minutes > 0 -> "$minutes menit yang lalu"
+            else -> "$seconds detik yang lalu"
+        }
+    }
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ArticlesWithImages>() {

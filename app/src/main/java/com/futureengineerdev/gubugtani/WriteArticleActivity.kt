@@ -10,6 +10,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -20,7 +21,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.futureengineerdev.gubugtani.article.ArticleAdapter
 import com.futureengineerdev.gubugtani.databinding.ActivityWriteArticleBinding
+import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
@@ -48,6 +51,7 @@ class WriteArticleActivity : AppCompatActivity() {
     private lateinit var currentPhotoPath: String
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
     private lateinit var addArticleViewModel: AddArticleViewModel
+    private val articleAdapter = ArticleAdapter()
     private var getFile: File? = null
 
 
@@ -116,13 +120,22 @@ class WriteArticleActivity : AppCompatActivity() {
                 Toast.makeText(this,"Foto artikel tidak boleh kosong", Toast.LENGTH_SHORT).show()
 
             }
+            if (binding.etUploadJudulArtikel.text.isNullOrEmpty()){
+                Toast.makeText(this,"Judul artikel tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            }
+            if (binding.etUploadDeskripsiArtikel.text.isNullOrEmpty()){
+                Toast.makeText(this,"Deskripsi artikel tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            }
             else{
                 CoroutineScope(Dispatchers.IO).launch {
                     uploadArticle()
                 }
             }
-
         }
+        binding.btnBackWriteArticle.setOnClickListener{
+            finish()
+        }
+        setupErrorModel()
     }
 
     private val inCamera = registerForActivityResult(
@@ -149,6 +162,30 @@ class WriteArticleActivity : AppCompatActivity() {
             binding.ivFotoUploadArtikel.setImageURI(setImage)
             getFile = myFile
         }
+    }
+    private fun setupErrorModel(){
+        addArticleViewModel.upload.observe(this){
+            when (it) {
+                is Resource.Success -> {
+                    Toast.makeText(this, it.data?.meta?.message, Toast.LENGTH_SHORT).show()
+                    finish()
+                    showLoading(false)
+                }
+                is Resource.Loading -> {
+                    showLoading(true)
+                    articleAdapter.refresh()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                    showLoading(false)
+                }
+
+                else -> {}
+            }
+        }
+    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.isLoadingUploadArticle.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private suspend fun uploadArticle() {

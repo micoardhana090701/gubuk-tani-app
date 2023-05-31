@@ -18,8 +18,8 @@ import okhttp3.RequestBody
 import retrofit2.http.Multipart
 
 class AddArticleViewModel(private val preferences: UserPreferences): ViewModel() {
-    private val _upload = MutableLiveData<UploadArticleResponse>()
-    val upload : LiveData<UploadArticleResponse> = _upload
+    private val _upload = MutableLiveData<Resource<UploadArticleResponse>>()
+    val upload : LiveData<Resource<UploadArticleResponse>> = _upload
     private val _imageMultipart = mutableListOf<MultipartBody.Part>()
     val imageMultipart = _imageMultipart
 
@@ -31,8 +31,13 @@ class AddArticleViewModel(private val preferences: UserPreferences): ViewModel()
     ){
         val accessToken = "Bearer ${preferences.getUserKey().first()}"
         viewModelScope.launch {
+            _upload.postValue(Resource.Loading())
             ApiConfig.apiInstance.uploadArticle(accessToken, images0 = images0, type=type, title=title, content=content).let {
-                _upload.postValue(it)
+                if(Resource.Success(it) != null){
+                    _upload.postValue(Resource.Success(it))
+                }else{
+                    _upload.postValue(Resource.Error(it.meta.message))
+                }
             }
         }
     }

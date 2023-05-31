@@ -56,6 +56,9 @@ class ComunityFragment() : Fragment() {
         setupViewModel()
         setupRecyclerView()
         setupView()
+        binding.swRefreshComunity.setOnRefreshListener {
+            refresh()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -64,6 +67,18 @@ class ComunityFragment() : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = articleAdapter
         }
+    }
+
+    private fun refresh(){
+        var swipeRefreshLayout = binding.swRefreshComunity
+        swipeRefreshLayout.isRefreshing = false
+        articleAdapter.refresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        articleAdapter.refresh()
+        setupViewModel()
     }
 
     private fun setupView() {

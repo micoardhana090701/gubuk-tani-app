@@ -59,12 +59,10 @@ class ProfileActivity : AppCompatActivity() {
         profileViewModel.profileUser.observe(this){
             when (it) {
                 is Resource.Success -> {
-                    Toast.makeText(this, it.data?.meta?.message, Toast.LENGTH_SHORT).show()
                     showLoading(false)
                 }
                 is Resource.Loading -> {
                     showLoading(true)
-                    profileViewModel.profileUser
                 }
                 is Resource.Error -> {
                     Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
@@ -99,6 +97,9 @@ class ProfileActivity : AppCompatActivity() {
                     .centerCrop()
                     .into(ivFotoProfile)
             }
+        }
+        binding.btnBackProfileUser.setOnClickListener {
+            finish()
         }
     }
 

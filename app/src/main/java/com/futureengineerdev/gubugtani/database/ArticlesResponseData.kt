@@ -1,12 +1,10 @@
 package com.futureengineerdev.gubugtani.database
 
 import android.os.Parcelable
-import androidx.room.Embedded
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-
+import java.util.Locale
 
 @Parcelize
 data class ArticlesResponseData (
@@ -23,6 +21,8 @@ data class ArticlesResponseData (
     val user_id: Int,
     @field:SerializedName("article_images")
     val article_images: List<ArticleImagesResponse>,
+    @field:SerializedName("created_at")
+    val created_at: String = System.currentTimeMillis().toString(),
 ) : Parcelable
 
 

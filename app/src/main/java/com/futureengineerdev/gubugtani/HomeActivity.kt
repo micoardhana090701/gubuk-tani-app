@@ -30,6 +30,9 @@ class HomeActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_comunity, R.id.navigation_camera, R.id.navigation_pestiside, R.id.navigation_profile
             )
         )
+        binding.floatingActionButton.setOnClickListener {
+            navController.navigate(R.id.navigation_camera)
+        }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

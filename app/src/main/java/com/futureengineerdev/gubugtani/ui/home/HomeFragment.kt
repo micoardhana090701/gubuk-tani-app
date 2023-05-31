@@ -19,6 +19,7 @@ import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
 import com.futureengineerdev.gubugtani.databinding.FragmentHomeBinding
 import com.futureengineerdev.gubugtani.etc.UserPreferences
+import com.futureengineerdev.gubugtani.ui.camera.CameraFragment
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
 import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
@@ -57,6 +58,9 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch{
             setupProfileView(view)
         }
+        binding.swRefresh.setOnRefreshListener {
+            refresh()
+        }
     }
 
     private fun setupViewModel() {
@@ -68,6 +72,18 @@ class HomeFragment : Fragment() {
                 homeAdapter.submitData(it)
             }
         }
+    }
+
+    private fun refresh(){
+        var swipeRefreshLayout = binding.swRefresh
+        swipeRefreshLayout.isRefreshing = false
+        homeAdapter.refresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homeAdapter.refresh()
+        setupViewModel()
     }
 
     private suspend fun setupProfileView(view: View){

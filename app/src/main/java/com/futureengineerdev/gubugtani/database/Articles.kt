@@ -3,7 +3,6 @@ package com.futureengineerdev.gubugtani.database
 import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.google.gson.annotations.SerializedName
@@ -11,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity(tableName = "articles")
-data class Articles (
+data class Articles(
     @PrimaryKey(autoGenerate = false)
     @field:SerializedName("id")
     val id: Int,
@@ -23,6 +22,8 @@ data class Articles (
     val content: String,
     @field:SerializedName("user_id")
     val user_id: Int,
+    @field:SerializedName("created_at")
+    val created_at: String = System.currentTimeMillis().toString(),
 ) : Parcelable
 
 @Parcelize

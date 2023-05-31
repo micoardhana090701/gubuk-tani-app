@@ -48,6 +48,13 @@
             android:layout_marginStart="@dimen/margin_start_end"
             android:layout_marginEnd="@dimen/margin_start_end"
             android:textSize="@dimen/text_small"/>
+        <TextView
+            android:id="@+id/tvWaktuPosting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            android:text="time"
+            android:layout_margin="7dp"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

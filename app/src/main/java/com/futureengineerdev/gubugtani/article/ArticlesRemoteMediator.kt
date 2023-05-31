@@ -10,7 +10,6 @@ import com.futureengineerdev.gubugtani.api.ApiService
 import com.futureengineerdev.gubugtani.database.ArticleImages
 import com.futureengineerdev.gubugtani.database.Articles
 import com.futureengineerdev.gubugtani.database.ArticlesDatabase
-import com.futureengineerdev.gubugtani.database.ArticlesResponseData
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.database.RemoteKeys
 import com.futureengineerdev.gubugtani.etc.UserPreferences
@@ -79,6 +78,7 @@ class ArticlesRemoteMediator(
                         item.title,
                         item.content,
                         item.user_id,
+                        item.created_at,
                     )
                     articlesDatabase.articlesDao().insertAll(article)
 
