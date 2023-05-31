@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futureengineerdev.gubugtani.api.ApiConfig
+import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.response.ProfileResponse
 import com.futureengineerdev.gubugtani.response.UpdateResponse
 import com.futureengineerdev.gubugtani.response.UpdateUser
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -21,13 +23,14 @@ import retrofit2.Response
 
 class ProfileViewModel(private val preferences: UserPreferences) : ViewModel() {
 
-    private val _profileUser = MutableLiveData<ProfileResponse>()
-    val profileUser : LiveData<ProfileResponse> = _profileUser
+    private val _profileUser = MutableLiveData<Resource<ProfileResponse>>()
+    val profileUser : LiveData<Resource<ProfileResponse>> = _profileUser
 
     private val _updateUser = MutableLiveData<UpdateResponse>()
     val updateUser : LiveData<UpdateResponse> = _updateUser
 
     fun getProfile(access_token: String){
+        _profileUser.postValue(Resource.Loading())
         ApiConfig.apiInstance.getProfile(access_token).enqueue(object : Callback<ProfileResponse>{
             override fun onResponse(
                 call: Call<ProfileResponse>,
@@ -36,13 +39,13 @@ class ProfileViewModel(private val preferences: UserPreferences) : ViewModel() {
                 if (response.isSuccessful){
                     val data = response.body()
                     if (data != null){
-                        _profileUser.postValue(data!!)
+                        _profileUser.postValue(Resource.Success(data))
                     }
-                }else{
+                }
+                else{
                     Log.e("Error: ", "onFailure : ${response.message()}")
                 }
             }
-
             override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
                 Log.d(ContentValues.TAG, "onFailure: ${t.message}")
             }
@@ -76,5 +79,4 @@ class ProfileViewModel(private val preferences: UserPreferences) : ViewModel() {
             }
         }
     }
-
 }

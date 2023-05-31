@@ -23,7 +23,7 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         val navView: BottomNavigationView = binding.navView
-
+        navView.background = null
         val navController = findNavController(R.id.nav_host_fragment_activity_home)
         val appBarConfiguration = AppBarConfiguration(
             setOf(

@@ -1,5 +1,7 @@
 package com.futureengineerdev.gubugtani.etc
 
+import com.futureengineerdev.gubugtani.response.User
+
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
 

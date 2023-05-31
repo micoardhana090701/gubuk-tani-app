@@ -1,12 +1,11 @@
 package com.futureengineerdev.gubugtani.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
-import android.widget.TextView
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -14,15 +13,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.futureengineerdev.gubugtani.ui.profile.ProfileActivity
 import com.futureengineerdev.gubugtani.R
-import com.futureengineerdev.gubugtani.article.ArticleAdapter
 import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
-import com.futureengineerdev.gubugtani.databinding.FragmentComunityBinding
 import com.futureengineerdev.gubugtani.databinding.FragmentHomeBinding
 import com.futureengineerdev.gubugtani.etc.UserPreferences
-import com.futureengineerdev.gubugtani.ui.dashboard.ComunityViewModel
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
 import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
@@ -87,9 +83,9 @@ class HomeFragment : Fragment() {
         profileViewModel.profileUser.observe(viewLifecycleOwner){
 
             if (it != null){
-                binding.tvNamaUserHome.setText(it.result.user.name)
+                binding.tvNamaUserHome.setText(it.data?.result?.user?.name)
                 val ivProfileHome = binding.ivProfileHome
-                if (it.result.user.avatar == null){
+                if (it.data?.result?.user?.avatar == null){
                     Glide.with(view.context)
                         .load(R.drawable.baseline_account_circle_24)
                         .centerCrop()
@@ -97,25 +93,29 @@ class HomeFragment : Fragment() {
                 }
                 else{
                     Glide.with(view.context)
-                        .load("https://app.gubuktani.com/storage/" + it.result.user.avatar)
+                        .load("https://app.gubuktani.com/storage/" + it.data.result.user.avatar)
                         .centerCrop()
                         .into(ivProfileHome)
                 }
             }
             else{
                 val ivProfileHome = binding.ivProfileHome
-                binding.tvNamaUserHome.setText(it?.result?.user?.name)
+                binding.tvNamaUserHome.setText(it?.data?.result?.user?.name)
                 Glide.with(view.context)
                     .load(R.drawable.baseline_account_circle_24)
                     .centerCrop()
                     .into(ivProfileHome)
             }
         }
+        binding.ivProfileHome.setOnClickListener{
+            val intent = Intent(requireContext(), ProfileActivity::class.java)
+            startActivity(intent)
+        }
     }
     private fun setupRecyclerView() {
         with(binding.rvArticleHome){
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = homeAdapter
         }
     }

@@ -19,6 +19,7 @@ class ViewModelFactory(private val pref: UserPreferences): ViewModelProvider.New
         return when(modelClass){
             AuthViewModel::class.java -> AuthViewModel(pref) as T
             ProfileViewModel::class.java -> ProfileViewModel(pref) as T
+            AddArticleViewModel::class.java -> AddArticleViewModel(pref) as T
             else -> throw  IllegalAccessException("Unknown ViewModel class: "+ modelClass.name)
         }
     }

@@ -22,6 +22,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/dark_green"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
@@ -29,7 +37,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
                     android:text="Hallo"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/text_big"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -49,24 +57,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:text="nama user"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/text_extra_big"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@color/light_green"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
                 <TextView
                     android:id="@+id/penyakitterkini"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="24dp"
                     android:text="Penyakit Terkini"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/text_extra_big"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvNamaUserHome" />
-
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
@@ -83,12 +96,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="24dp"
-                    android:textSize="@dimen/text_extra_big"
                     android:text="Artikel Terkini"
                     android:textColor="@color/black"
+                    android:textSize="@dimen/text_extra_big"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recyclerView" />
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvArticleHome"
@@ -96,6 +109,8 @@
                     android:layout_height="500dp"
                     android:layout_margin="24dp"
                     android:columnCount="3"
+                    app:flow_verticalAlign="center"
+                    app:flow_horizontalAlign="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

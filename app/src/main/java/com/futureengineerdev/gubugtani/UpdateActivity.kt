@@ -19,25 +19,17 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.futureengineerdev.gubugtani.component.CustomAlertDialog
 import com.futureengineerdev.gubugtani.databinding.ActivityUpdateBinding
-import com.futureengineerdev.gubugtani.databinding.FragmentProfileBinding
-import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
 import com.futureengineerdev.gubugtani.etc.reduceFileImage
 import com.futureengineerdev.gubugtani.etc.uriToFile
-import com.futureengineerdev.gubugtani.response.ProfileResponse
-import com.futureengineerdev.gubugtani.response.UpdateUser
-import com.futureengineerdev.gubugtani.ui.profile.ProfileFragment
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
 import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -73,7 +65,6 @@ class UpdateActivity : AppCompatActivity(){
     private suspend fun setupViewModel() {
         val pref = UserPreferences.getInstance(dataStore)
         val viewModelFactory = ViewModelFactory(pref)
-        val customAlertDialog = CustomAlertDialog(this)
         viewModelFactory.setApplication(application)
 
         authViewModel = ViewModelProvider(this, ViewModelFactory(pref))[AuthViewModel::class.java]
@@ -89,11 +80,9 @@ class UpdateActivity : AppCompatActivity(){
         binding.btnUpateBack.setOnClickListener{
             finish()
         }
-
         binding.ivFotoUpdate.setOnClickListener{
             val alertDialogBuilder = AlertDialog.Builder(this)
-            alertDialogBuilder.setTitle("Judul Dialog")
-            alertDialogBuilder.setMessage("Pesan dialog.")
+            alertDialogBuilder.setTitle("Pilih Direktori")
             alertDialogBuilder.setIcon(R.drawable.baseline_image_24)
 
             alertDialogBuilder.setPositiveButton("Camera") { dialogInterface: DialogInterface, i: Int ->
@@ -147,10 +136,10 @@ class UpdateActivity : AppCompatActivity(){
         profileViewModel.getProfile(access_token = "Bearer $accessToken")
         profileViewModel.profileUser.observe(this){
             if (it != null){
-                binding.etNamaUpdate.setText(it.result.user.name)
-                binding.etUsernameUpdate.setText(it.result.user.username)
+                binding.etNamaUpdate.setText(it.data?.result?.user?.name)
+                binding.etUsernameUpdate.setText(it.data?.result?.user?.username)
                 val ivFotoProfile = binding.ivFotoUpdate
-                if (it.result.user.avatar == null){
+                if (it.data?.result?.user?.avatar == null){
                     Glide.with(this)
                         .load(R.drawable.baseline_account_circle_24)
                         .centerCrop()
@@ -158,7 +147,7 @@ class UpdateActivity : AppCompatActivity(){
                 }
                 else{
                     Glide.with(this)
-                        .load("https://app.gubuktani.com/storage/" + it.result.user.avatar)
+                        .load("https://app.gubuktani.com/storage/" + it.data.result.user.avatar)
                         .centerCrop()
                         .into(ivFotoProfile)
                 }

@@ -2,6 +2,7 @@ package com.futureengineerdev.gubugtani.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.futureengineerdev.gubugtani.WriteArticleActivity
 import com.futureengineerdev.gubugtani.article.ArticleAdapter
 import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
 import com.futureengineerdev.gubugtani.database.ArticleImages
@@ -30,8 +32,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ComunityFragment() : Fragment() {
-
-
 
     private var _binding: FragmentComunityBinding? = null
     private val binding get() = _binding!!
@@ -55,6 +55,7 @@ class ComunityFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupViewModel()
         setupRecyclerView()
+        setupView()
     }
 
     private fun setupRecyclerView() {
@@ -62,6 +63,12 @@ class ComunityFragment() : Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = articleAdapter
+        }
+    }
+
+    private fun setupView() {
+        binding.btnWriteArticle.setOnClickListener {
+            startActivity(Intent(requireContext(), WriteArticleActivity::class.java))
         }
     }
 

@@ -1,5 +1,6 @@
 package com.futureengineerdev.gubugtani.article
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.futureengineerdev.gubugtani.DetailActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.database.ArticleImages
 import com.futureengineerdev.gubugtani.database.Articles
@@ -24,17 +26,22 @@ class ArticleAdapter : PagingDataAdapter<ArticlesWithImages, ArticleAdapter.Arti
                 tvDeskripsiSingkatArtikel.text = article.articles.content
                 val firstImageDisplay = article.article_images
                 val loadImageArticles = firstImageDisplay[0].image
-                if (loadImageArticles == "null") {
+                if (loadImageArticles != null) {
                     Glide.with(itemView.context)
-                        .load("https://app.gubuktani.com/storage/public/gubuk-tani-logo.png")
+                        .load("https://app.gubuktani.com/storage/$loadImageArticles")
                         .centerCrop()
                         .into(ivGambarArtikel)
                 }
                 else{
                     Glide.with(itemView.context)
-                        .load("https://app.gubuktani.com/storage/$loadImageArticles")
+                        .load(R.drawable.null_pict)
                         .centerCrop()
                         .into(ivGambarArtikel)
+                }
+                root.setOnClickListener{
+                    val detailIntent = Intent(root.context, DetailActivity::class.java)
+                    detailIntent.putExtra(DetailActivity.EXTRA_DATA, article)
+                    root.context.startActivity(detailIntent)
                 }
             }
         }

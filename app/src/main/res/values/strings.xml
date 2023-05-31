@@ -2,13 +2,15 @@
     <string name="app_name">Gubuk Tani</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Beranda</string>
-    <string name="title_comunity">Komunitas</string>
+    <string name="title_comunity">Article</string>
     <string name="title_pestiside">Pestisida</string>
     <string name="title_camera">Kamera</string>
     <string name="title_person">Akun</string>
     <string name="dummy_penyakit">Penyakit Embun Pagi</string>
     <string name="dummy_deskripsi">Lorem Ipsum is simply dummy text of the printing and typesetting industry</string>
-    <string name="company_name">Develope by :\nFuture Engineer Dev</string>
-    <string name="welcome">Hallo... \nSelamat Datang! \nSilahkan Login terlebih dahulu</string>
+    <string name="company_name">Develop by :\nFuture Engineer Dev</string>
+    <string name="welcome">Selamat Datang! \nSilahkan masuk terlebih dahulu</string>
+    <string name="welcome_daftar">Selamat Datang! \nSilahkan daftar terlebih dahulu</string>
+
 
 </resources>
