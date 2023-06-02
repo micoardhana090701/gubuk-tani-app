@@ -23,6 +23,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".ChooseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity
@@ -43,6 +49,9 @@
             android:label="@string/title_activity_home" />
         <activity
             android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.camera.CameraFragment"
             android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"

@@ -23,11 +23,11 @@
         android:label="@string/title_pestiside"
         tools:layout="@layout/fragment_pestiside" />
 
-    <fragment
-        android:id="@+id/navigation_camera"
-        android:name="com.futureengineerdev.gubugtani.ui.camera.CameraFragment"
-        android:label="@string/title_camera"
-        tools:layout="@layout/fragment_camera" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_camera"-->
+<!--        android:name="com.futureengineerdev.gubugtani.ui.camera.CameraFragment"-->
+<!--        android:label="@string/title_camera"-->
+<!--        tools:layout="@layout/fragment_camera" />-->
 
     <fragment
         android:id="@+id/navigation_profile"

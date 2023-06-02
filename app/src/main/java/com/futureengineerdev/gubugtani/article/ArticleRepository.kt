@@ -14,6 +14,7 @@ import com.futureengineerdev.gubugtani.database.Articles
 import com.futureengineerdev.gubugtani.database.ArticlesDatabase
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.etc.UserPreferences
+import com.futureengineerdev.gubugtani.response.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -30,5 +31,9 @@ class ArticleRepository (private val articlesDatabase: ArticlesDatabase, private
                 articlesDatabase.articlesDao().findAll()
             }
         ).liveData
+    }
+    fun searchArticle(query: String): LiveData<ArticlesWithImages> {
+        val searchQuery = "%$query%" // Menambahkan wildcard untuk pencarian yang fleksibel
+        return articlesDatabase.articlesDao().findByTitle(searchQuery)
     }
 }

@@ -2,6 +2,7 @@ package com.futureengineerdev.gubugtani.ui.camera
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
@@ -16,112 +17,117 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.futureengineerdev.gubugtani.R
+import com.futureengineerdev.gubugtani.databinding.ActivityHomeBinding
 import com.futureengineerdev.gubugtani.databinding.FragmentCameraBinding
 import com.futureengineerdev.gubugtani.databinding.FragmentComunityBinding
 import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
 import com.futureengineerdev.gubugtani.etc.uriToFile
 import com.futureengineerdev.gubugtani.ui.dashboard.ComunityViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
 
-class CameraFragment : Fragment(), View.OnClickListener{
+class CameraFragment : AppCompatActivity(), View.OnClickListener{
 
     private var _binding: FragmentCameraBinding? = null
     private lateinit var currentPhotoPath: String
     private val binding get() = _binding!!
     private var getFile: File? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val cameraViewModel =
-            ViewModelProvider(this).get(CameraViewModel::class.java)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        _binding = FragmentCameraBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        _binding = FragmentCameraBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        supportActionBar?.hide()
 
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         setupView()
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
-                requireActivity(),
+                this,
                 REQUIRED_PERMISSIONS,
                 REQUEST_CODE_PERMISSION
             )
         }
     }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun setupView() {
         with(binding){
-            btnTambahFoto.setOnClickListener(this@CameraFragment)
+            btnShowPopupCamera.setOnClickListener(this@CameraFragment)
             btnUploadFoto.setOnClickListener(this@CameraFragment)
-            btnGalery.setOnClickListener(this@CameraFragment)
+            btnBackUnggahFoto.setOnClickListener(this@CameraFragment)
         }
     }
 
 
     override fun onClick(v: View?) {
         when(v){
-            binding.btnTambahFoto -> startCamera()
+            binding.btnShowPopupCamera -> {
+                val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.setTitle("Pilih Direktori")
+                alertDialogBuilder.setIcon(R.drawable.baseline_image_24)
+
+                alertDialogBuilder.setPositiveButton("Camera") { dialogInterface: DialogInterface, i: Int ->
+                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    intent.resolveActivity(packageManager)
+                    createCustomTempFile(application).also {
+                        val photoURI : Uri = FileProvider.getUriForFile(
+                            this.applicationContext,
+                            "com.futureengineerdev.gubugtani.fileprovider",
+                            it
+                        )
+                        currentPhotoPath = it.absolutePath
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        inCamera.launch(intent)
+                    }
+                    dialogInterface.dismiss()
+                }
+
+                alertDialogBuilder.setNegativeButton("Galeri") { dialogInterface: DialogInterface, i: Int ->
+                    val intent = Intent()
+                    intent.action = Intent.ACTION_GET_CONTENT
+                    intent.type = "image/*"
+                    val chooser = Intent.createChooser(intent, "Pilih Gambar")
+                    inGalery.launch(chooser)
+                    dialogInterface.dismiss()
+                }
+
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
+            }
             binding.btnUploadFoto -> uploadFoto()
-            binding.btnGalery -> openGallery()
+            binding.btnBackUnggahFoto -> finish()
         }
     }
 
-    private fun openGallery() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, "Pilih Foto")
-        inGallery.launch(chooser)
-    }
-
-    private val inGallery = registerForActivityResult(
+    private val inGalery = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ){
-        if(it.resultCode == RESULT_OK){
-            val setImage: Uri = it.data?.data as Uri
-            val myFile = uriToFile(setImage, requireContext().applicationContext)
+    ){result ->
+        if (result.resultCode == RESULT_OK){
+            val setImage: Uri = result.data?.data as Uri
+            val myFile = uriToFile(setImage, this)
             binding.ivFotoUploadDeteksi.setImageURI(setImage)
             getFile = myFile
         }
     }
 
-    private fun uploadFoto() {
-        Toast.makeText(requireContext().applicationContext, "Foto Telah Terupload", Toast.LENGTH_SHORT).show()
-    }
 
-    private fun startCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.resolveActivity(requireActivity().packageManager)
-        createCustomTempFile(requireContext().applicationContext).also {
-            val photoURI : Uri = FileProvider.getUriForFile(
-                requireContext().applicationContext,
-                "com.futureengineerdev.gubugtani.fileprovider",
-                it
-            )
-            currentPhotoPath = it.absolutePath
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-            inCamera.launch(intent)
-        }
+    private fun uploadFoto() {
+        Toast.makeText(this, "Foto Telah Terupload", Toast.LENGTH_SHORT).show()
     }
 
     private val inCamera = registerForActivityResult(

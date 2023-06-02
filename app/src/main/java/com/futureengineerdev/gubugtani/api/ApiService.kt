@@ -1,6 +1,9 @@
 package com.futureengineerdev.gubugtani.api
 
 import com.futureengineerdev.gubugtani.article.ArticlesResponse
+import com.futureengineerdev.gubugtani.database.Articles
+import com.futureengineerdev.gubugtani.database.ArticlesResponseData
+import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.request.LoginRequest
 import com.futureengineerdev.gubugtani.request.RegisterRequest
 import com.futureengineerdev.gubugtani.response.LoginResponse
@@ -40,6 +43,12 @@ interface ApiService {
         @Part("name") name: RequestBody,
         @Part("city") city: RequestBody,
     ): UpdateResponse
+
+    @GET("article")
+    suspend fun searchArticle(
+        @Header("Authorization") access_token: String,
+        @Query("query") query: String,
+    ): Call<ArticlesResponse>
 
     @Multipart
     @POST("profile")

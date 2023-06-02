@@ -1,5 +1,6 @@
 package com.futureengineerdev.gubugtani
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.futureengineerdev.gubugtani.databinding.ActivityHomeBinding
+import com.futureengineerdev.gubugtani.ui.camera.CameraFragment
 
 class HomeActivity : AppCompatActivity() {
 
@@ -27,11 +29,11 @@ class HomeActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_home)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_comunity, R.id.navigation_camera, R.id.navigation_pestiside, R.id.navigation_profile
+                R.id.navigation_home, R.id.navigation_comunity, R.id.navigation_pestiside, R.id.navigation_profile
             )
         )
         binding.floatingActionButton.setOnClickListener {
-            navController.navigate(R.id.navigation_camera)
+            startActivity(Intent(this, ChooseActivity::class.java))
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

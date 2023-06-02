@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -18,6 +19,7 @@ import com.futureengineerdev.gubugtani.ui.profile.ProfileActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
 import com.futureengineerdev.gubugtani.databinding.FragmentHomeBinding
+import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.ui.camera.CameraFragment
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
@@ -97,31 +99,45 @@ class HomeFragment : Fragment() {
         val accessToken = pref.getUserKey().first()
         profileViewModel.getProfile(access_token = "Bearer $accessToken")
         profileViewModel.profileUser.observe(viewLifecycleOwner){
+            when (it) {
+                is Resource.Success -> {
+                    showLoading(false)
+                    if (it != null){
+                        binding.tvNamaUserHome.setText(it.data?.result?.user?.name)
+                        val ivProfileHome = binding.ivProfileHome
+                        if (it.data?.result?.user?.avatar == null){
+                            Glide.with(view.context)
+                                .load(R.drawable.baseline_account_circle_24)
+                                .centerCrop()
+                                .into(ivProfileHome)
+                        }
+                        else{
+                            Glide.with(view.context)
+                                .load("https://app.gubuktani.com/storage/" + it.data.result.user.avatar)
+                                .centerCrop()
+                                .into(ivProfileHome)
+                        }
+                    }
+                    else{
+                        val ivProfileHome = binding.ivProfileHome
+                        binding.tvNamaUserHome.setText(it?.data?.result?.user?.name)
+                        Glide.with(view.context)
+                            .load(R.drawable.baseline_account_circle_24)
+                            .centerCrop()
+                            .into(ivProfileHome)
+                    }
+                }
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    showLoading(false)
+                }
 
-            if (it != null){
-                binding.tvNamaUserHome.setText(it.data?.result?.user?.name)
-                val ivProfileHome = binding.ivProfileHome
-                if (it.data?.result?.user?.avatar == null){
-                    Glide.with(view.context)
-                        .load(R.drawable.baseline_account_circle_24)
-                        .centerCrop()
-                        .into(ivProfileHome)
-                }
-                else{
-                    Glide.with(view.context)
-                        .load("https://app.gubuktani.com/storage/" + it.data.result.user.avatar)
-                        .centerCrop()
-                        .into(ivProfileHome)
-                }
+                else -> {}
             }
-            else{
-                val ivProfileHome = binding.ivProfileHome
-                binding.tvNamaUserHome.setText(it?.data?.result?.user?.name)
-                Glide.with(view.context)
-                    .load(R.drawable.baseline_account_circle_24)
-                    .centerCrop()
-                    .into(ivProfileHome)
-            }
+
         }
         binding.ivProfileHome.setOnClickListener{
             val intent = Intent(requireContext(), ProfileActivity::class.java)
@@ -134,6 +150,9 @@ class HomeFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = homeAdapter
         }
+    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.isLoadingHome.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

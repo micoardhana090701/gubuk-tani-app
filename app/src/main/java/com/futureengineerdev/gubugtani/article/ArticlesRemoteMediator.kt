@@ -13,6 +13,7 @@ import com.futureengineerdev.gubugtani.database.ArticlesDatabase
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.database.RemoteKeys
 import com.futureengineerdev.gubugtani.etc.UserPreferences
+import com.futureengineerdev.gubugtani.response.User
 import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalPagingApi::class)
@@ -21,7 +22,6 @@ class ArticlesRemoteMediator(
     private val apiService: ApiService,
     private val access_token: UserPreferences): RemoteMediator<Int, ArticlesWithImages>()
 {
-
     private companion object{
         const val STARTING_PAGE_INDEX = 1
     }

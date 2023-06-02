@@ -43,7 +43,7 @@
             <com.futureengineerdev.gubugtani.component.EditText
                 android:id="@+id/etEmailR"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:hint="Email"
                 android:inputType="text"
@@ -56,7 +56,7 @@
             <com.futureengineerdev.gubugtani.component.EditText
                 android:id="@+id/etUsernameR"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:textColorHint="@color/white_page_2"
                 android:layout_marginHorizontal="24dp"
                 android:inputType="text"
@@ -69,7 +69,7 @@
             <com.futureengineerdev.gubugtani.component.EditText
                 android:id="@+id/etNamaUserR"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:textColorHint="@color/white_page_2"
                 android:layout_marginHorizontal="24dp"
                 android:hint="Nama Lengkap"
@@ -82,7 +82,7 @@
             <com.futureengineerdev.gubugtani.component.EditText
                 android:id="@+id/etPasswordR"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:hint="Password"
                 android:textColorHint="@color/white_page_2"
@@ -95,7 +95,7 @@
             <com.futureengineerdev.gubugtani.component.EditText
                 android:id="@+id/etRePaswordR"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:hint="Masukan Ulang Password"
                 android:layout_marginTop="5dp"

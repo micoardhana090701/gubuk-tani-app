@@ -41,8 +41,6 @@ data class Result(
 )
 
 
-
-
 data class Tag(
 	val id: Int?,
 	val tag_id: Int?,

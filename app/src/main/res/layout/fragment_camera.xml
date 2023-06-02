@@ -8,35 +8,73 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
-            android:id="@+id/ivFotoUploadDeteksi"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:id="@+id/btnBackUnggahFoto"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_margin="24dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/null_pict"
+            android:background="@drawable/button_solid"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:text="Unggah Foto"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_extra_big"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btnTambahFoto"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="24dp"
-            android:background="@drawable/button_solid"
-            android:text="Kamera"
-            app:layout_constraintTop_toBottomOf="@+id/ivFotoUploadDeteksi"
-            tools:layout_editor_absoluteX="24dp" />
-        <Button
-            android:id="@+id/btnGalery"
+            android:text="Unggah foto untuk mendeteksi\nPenyakit tanaman"
+            android:textSize="@dimen/text_big"
+            app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="24dp"
-            android:background="@drawable/button_solid"
-            android:text="Galeri"
-            app:layout_constraintTop_toBottomOf="@+id/btnTambahFoto"
-            tools:layout_editor_absoluteX="24dp" />
+            app:layout_constraintBottom_toTopOf="@+id/btnUploadFoto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+            <ImageView
+                android:id="@+id/ivFotoUploadDeteksi"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_margin="24dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/null_pict"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnShowPopupCamera"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:layout_marginHorizontal="48dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/button_solid"
+                android:padding="7dp"
+                android:src="@drawable/outline_camera_alt_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/btnUploadFoto"
@@ -44,10 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="24dp"
             android:background="@drawable/button_solid"
-            android:text="Upload Foto"
-            app:layout_constraintTop_toBottomOf="@+id/btnGalery"
-            tools:layout_editor_absoluteX="24dp" />
+            android:text="Unggah Foto"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </FrameLayout>

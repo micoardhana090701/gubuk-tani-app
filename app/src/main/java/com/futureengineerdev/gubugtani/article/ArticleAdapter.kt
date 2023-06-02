@@ -1,27 +1,21 @@
 package com.futureengineerdev.gubugtani.article
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.futureengineerdev.gubugtani.DetailActivity
 import com.futureengineerdev.gubugtani.R
-import com.futureengineerdev.gubugtani.database.ArticleImages
-import com.futureengineerdev.gubugtani.database.Articles
+import com.futureengineerdev.gubugtani.database.ArticlesResponseData
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.databinding.ItemArtikelBinding
-import okhttp3.internal.http.toHttpDateOrNull
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 
 class ArticleAdapter : PagingDataAdapter<ArticlesWithImages, ArticleAdapter.ArticleViewHolder>(DIFF_CALLBACK) {
-
     inner class ArticleViewHolder(private val binding: ItemArtikelBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(article: ArticlesWithImages) {
@@ -51,6 +45,7 @@ class ArticleAdapter : PagingDataAdapter<ArticlesWithImages, ArticleAdapter.Arti
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val binding = ItemArtikelBinding.inflate(LayoutInflater.from(parent.context), parent, false)

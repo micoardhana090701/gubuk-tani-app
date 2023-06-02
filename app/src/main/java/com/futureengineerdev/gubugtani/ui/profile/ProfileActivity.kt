@@ -12,6 +12,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.futureengineerdev.gubugtani.HistoryActivity
 import com.futureengineerdev.gubugtani.LoginActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.UpdateActivity
@@ -60,6 +61,32 @@ class ProfileActivity : AppCompatActivity() {
             when (it) {
                 is Resource.Success -> {
                     showLoading(false)
+                    if (it != null){
+                        binding.tvEmail.setText(it.data?.result?.user?.email)
+                        binding.tvUsername.setText(it.data?.result?.user?.name)
+                        val ivFotoProfile = binding.ivFotoProfil
+                        if (it.data?.result?.user?.avatar == null){
+                            Glide.with(this)
+                                .load(R.drawable.baseline_account_circle_24)
+                                .centerCrop()
+                                .into(ivFotoProfile)
+                        }
+                        else{
+                            Glide.with(this)
+                                .load("https://app.gubuktani.com/storage/" + it.data.result.user.avatar)
+                                .centerCrop()
+                                .into(ivFotoProfile)
+                        }
+                    }
+                    else{
+                        val ivFotoProfile = binding.ivFotoProfil
+                        binding.tvEmail.setText(it?.data?.result?.user?.email)
+                        binding.tvUsername.setText(it?.data?.result?.user?.username)
+                        Glide.with(this)
+                            .load(R.drawable.baseline_account_circle_24)
+                            .centerCrop()
+                            .into(ivFotoProfile)
+                    }
                 }
                 is Resource.Loading -> {
                     showLoading(true)
@@ -71,35 +98,12 @@ class ProfileActivity : AppCompatActivity() {
 
                 else -> {}
             }
-            if (it != null){
-                binding.tvEmail.setText(it.data?.result?.user?.email)
-                binding.tvUsername.setText(it.data?.result?.user?.name)
-                val ivFotoProfile = binding.ivFotoProfil
-                if (it.data?.result?.user?.avatar == null){
-                    Glide.with(this)
-                        .load(R.drawable.baseline_account_circle_24)
-                        .centerCrop()
-                        .into(ivFotoProfile)
-                }
-                else{
-                    Glide.with(this)
-                        .load("https://app.gubuktani.com/storage/" + it.data.result.user.avatar)
-                        .centerCrop()
-                        .into(ivFotoProfile)
-                }
-            }
-            else{
-                val ivFotoProfile = binding.ivFotoProfil
-                binding.tvEmail.setText(it?.data?.result?.user?.email)
-                binding.tvUsername.setText(it?.data?.result?.user?.username)
-                Glide.with(this)
-                    .load(R.drawable.baseline_account_circle_24)
-                    .centerCrop()
-                    .into(ivFotoProfile)
-            }
         }
         binding.btnBackProfileUser.setOnClickListener {
             finish()
+        }
+        binding.btnHistory.setOnClickListener{
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
     }
 

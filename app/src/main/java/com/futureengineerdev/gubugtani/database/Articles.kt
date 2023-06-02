@@ -38,8 +38,6 @@ data class ArticlesWithImages(
     val article_images: List<ArticleImages>
 ): Parcelable
 
-
-
 @Parcelize
 @Entity(tableName = "article_images")
 data class ArticleImages(
