@@ -20,20 +20,16 @@ import kotlinx.coroutines.flow.map
 
 class ArticleRepository (private val articlesDatabase: ArticlesDatabase, private val apiService: ApiService, private val access_token: UserPreferences){
 
-    fun getArticle() : LiveData<PagingData<ArticlesWithImages>> {
+    fun getArticle(searchQuery: String) : LiveData<PagingData<ArticlesWithImages>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
-            remoteMediator = ArticlesRemoteMediator(articlesDatabase, apiService, access_token),
+            remoteMediator = ArticlesRemoteMediator(articlesDatabase, apiService, access_token=access_token,  searchQuery = searchQuery),
             pagingSourceFactory = {
                 articlesDatabase.articlesDao().findAll()
             }
         ).liveData
-    }
-    fun searchArticle(query: String): LiveData<ArticlesWithImages> {
-        val searchQuery = "%$query%" // Menambahkan wildcard untuk pencarian yang fleksibel
-        return articlesDatabase.articlesDao().findByTitle(searchQuery)
     }
 }

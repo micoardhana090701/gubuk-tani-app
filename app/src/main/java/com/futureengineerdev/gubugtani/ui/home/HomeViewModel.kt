@@ -11,5 +11,6 @@ import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 
 class HomeViewModel(private val repository: ArticleRepository) : ViewModel() {
 
-    fun getArticle(): LiveData<PagingData<ArticlesWithImages>> = repository.getArticle().cachedIn(viewModelScope)
+    fun getArticle(searchQuery : String): LiveData<PagingData<ArticlesWithImages>> = repository.getArticle(searchQuery).cachedIn(viewModelScope)
+
 }

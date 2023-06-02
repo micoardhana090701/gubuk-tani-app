@@ -68,8 +68,8 @@ class HomeFragment : Fragment() {
     private fun setupViewModel() {
 
         homeViewModel = ViewModelProvider(this, ViewModelArticleFactory(requireContext()))[HomeViewModel::class.java]
-
-        homeViewModel.getArticle().observe(viewLifecycleOwner){
+        val searchQuery = "%%"
+        homeViewModel.getArticle(searchQuery).observe(viewLifecycleOwner){
             CoroutineScope(Dispatchers.IO).launch {
                 homeAdapter.submitData(it)
             }

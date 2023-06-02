@@ -44,12 +44,6 @@ interface ApiService {
         @Part("city") city: RequestBody,
     ): UpdateResponse
 
-    @GET("article")
-    suspend fun searchArticle(
-        @Header("Authorization") access_token: String,
-        @Query("query") query: String,
-    ): Call<ArticlesResponse>
-
     @Multipart
     @POST("profile")
     suspend fun updateData(
@@ -62,8 +56,10 @@ interface ApiService {
     @GET("article")
     suspend fun getArticles(
         @Header("Authorization") access_token: String,
-        @Query("page") page: Int = 1,
-        @Query("limit") limit: Int = 1,
+        @Query("type") type: Query? = null,
+        @Query("search") search: String? = null,
+        @Query("page") page: Int = 5,
+        @Query("limit") limit: Int = 5,
     ): ArticlesResponse
 
     @Multipart

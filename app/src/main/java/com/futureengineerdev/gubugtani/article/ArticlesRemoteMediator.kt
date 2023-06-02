@@ -5,6 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import androidx.room.Query
 import androidx.room.withTransaction
 import com.futureengineerdev.gubugtani.api.ApiService
 import com.futureengineerdev.gubugtani.database.ArticleImages
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.first
 class ArticlesRemoteMediator(
     private val articlesDatabase: ArticlesDatabase,
     private val apiService: ApiService,
+    private val searchQuery: String,
     private val access_token: UserPreferences): RemoteMediator<Int, ArticlesWithImages>()
 {
     private companion object{
@@ -53,9 +55,8 @@ class ArticlesRemoteMediator(
         }
         try {
             val access_token = "Bearer ${access_token.getUserKey().first()}"
-            val responseData = apiService.getArticles(access_token, page, state.config.pageSize)
+            val responseData = apiService.getArticles(access_token = access_token, search = searchQuery, type = null, page = page, limit = state.config.pageSize)
             val endOfPaginationReached = responseData.result.next_page_url == null
-
             articlesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH){
                     articlesDatabase.remoteKeysDao().deleteRemoteKeys()

@@ -19,9 +19,6 @@ interface ArticlesDao {
     suspend fun deleteAll(): Int
     @Query("SELECT * FROM articles ORDER BY id DESC")
     fun findAll(): PagingSource<Int, ArticlesWithImages>
-
-    @Query("SELECT * FROM articles WHERE title LIKE :title")
-    fun findByTitle(title: String): LiveData<ArticlesWithImages>
 }
 @Dao
 interface ArticleImagesDao{

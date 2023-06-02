@@ -19,32 +19,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <com.futureengineerdev.gubugtani.component.EditText
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Cari judul artikel disini"
+        android:padding="10dp"
+        android:background="@drawable/border_input"
         android:layout_margin="24dp"
+        android:drawableLeft="@drawable/outline_search_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <ImageView
+    <Button
         android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="24dp"
+        android:text="Cari"
+        android:background="@drawable/button_solid"
         android:src="@drawable/outline_camera_alt_24"
-        app:layout_constraintBottom_toBottomOf="@+id/searchView"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swRefreshComunity"
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView">
+        app:layout_constraintTop_toBottomOf="@+id/btnSearch">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvArticle"
@@ -65,17 +74,18 @@
         android:src="@drawable/baseline_create_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-<!--    <ProgressBar-->
-<!--        android:id="@+id/isLoadingArticle"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/button_solid"-->
-<!--        android:padding="10dp"-->
-<!--        android:indeterminateTint="@color/white"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <ProgressBar
+        android:id="@+id/isLoadingSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_solid"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

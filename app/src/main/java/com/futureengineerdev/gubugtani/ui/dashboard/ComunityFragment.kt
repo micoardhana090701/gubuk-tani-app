@@ -6,16 +6,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.util.query
+import com.futureengineerdev.gubugtani.HomeActivity
 import com.futureengineerdev.gubugtani.WriteArticleActivity
+import com.futureengineerdev.gubugtani.api.ApiConfig
 import com.futureengineerdev.gubugtani.article.ArticleAdapter
 import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
 import com.futureengineerdev.gubugtani.databinding.FragmentComunityBinding
+import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
@@ -27,10 +32,12 @@ class ComunityFragment() : Fragment() {
 
     private var _binding: FragmentComunityBinding? = null
     private val binding get() = _binding!!
+    private var apiConfig = ApiConfig.apiInstance
     private val articleAdapter = ArticleAdapter()
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
     private lateinit var comunityViewModel: ComunityViewModel
     private lateinit var authViewModel: AuthViewModel
+    private var mShouldFinish = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -94,18 +101,24 @@ class ComunityFragment() : Fragment() {
             this,
             ViewModelArticleFactory(requireContext())
         )[ComunityViewModel::class.java]
-
-        comunityViewModel.getArticle().observe(viewLifecycleOwner) {
+        val searchQuery = binding.searchView.text.toString()
+        comunityViewModel.getArticle(searchQuery).observe(viewLifecycleOwner) {
             CoroutineScope(Dispatchers.IO).launch {
                 articleAdapter.submitData(it)
             }
         }
         binding.btnSearch.setOnClickListener {
-            val query = binding.searchView.text.toString()
-            CoroutineScope(Dispatchers.IO).launch{
-                comunityViewModel.searchArticle(query)
+            val searchQuery = binding.searchView.text.toString().trim()
+            comunityViewModel.getArticle(searchQuery).observe(viewLifecycleOwner) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    articleAdapter.submitData(it)
+                }
             }
         }
+    }
+    private fun showLoading(isLoadingLogin: Boolean){
+        binding.isLoadingSearch.visibility = if (isLoadingLogin) View.VISIBLE else View.GONE
+        binding.btnSearch.isEnabled = !isLoadingLogin
     }
 
     override fun onDestroyView() {
