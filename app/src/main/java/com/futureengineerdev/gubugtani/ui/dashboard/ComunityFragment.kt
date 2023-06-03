@@ -101,14 +101,17 @@ class ComunityFragment() : Fragment() {
             this,
             ViewModelArticleFactory(requireContext())
         )[ComunityViewModel::class.java]
+
         val searchQuery = binding.searchView.text.toString()
         comunityViewModel.getArticle(searchQuery).observe(viewLifecycleOwner) {
             CoroutineScope(Dispatchers.IO).launch {
                 articleAdapter.submitData(it)
             }
         }
+
         binding.btnSearch.setOnClickListener {
             val searchQuery = binding.searchView.text.toString().trim()
+
             comunityViewModel.getArticle(searchQuery).observe(viewLifecycleOwner) {
                 CoroutineScope(Dispatchers.IO).launch {
                     articleAdapter.submitData(it)

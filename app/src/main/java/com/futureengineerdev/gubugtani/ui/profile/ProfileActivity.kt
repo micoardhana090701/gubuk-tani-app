@@ -114,6 +114,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnLogOut.setOnClickListener {
             authViewModel.logout()
             startActivity(Intent(this, LoginActivity::class.java))
+            finishAffinity()
         }
         binding.btnUbahProfile.setOnClickListener{
             startActivity(Intent(this, UpdateActivity::class.java))

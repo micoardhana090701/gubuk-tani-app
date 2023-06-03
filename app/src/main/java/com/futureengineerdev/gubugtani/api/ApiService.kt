@@ -6,7 +6,9 @@ import com.futureengineerdev.gubugtani.database.ArticlesResponseData
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.request.LoginRequest
 import com.futureengineerdev.gubugtani.request.RegisterRequest
+import com.futureengineerdev.gubugtani.response.ChoosingPlantResponse
 import com.futureengineerdev.gubugtani.response.LoginResponse
+import com.futureengineerdev.gubugtani.response.PlantsItem
 import com.futureengineerdev.gubugtani.response.ProfileResponse
 
 import com.futureengineerdev.gubugtani.response.RegisterResponse
@@ -25,6 +27,7 @@ import retrofit2.http.PartMap
 import retrofit2.http.Query
 
 interface ApiService {
+
     @POST("auth/login")
     fun login(@Body requestBody: LoginRequest): Call<LoginResponse>
     @POST("auth/register")
@@ -71,5 +74,10 @@ interface ApiService {
         @Part("title") title: RequestBody,
         @Part("content") content: RequestBody,
     ): UploadArticleResponse
+
+    @GET("plant")
+    suspend fun choosingPlant(
+        @Header("Authorization") access_token: String,
+    ): ChoosingPlantResponse
 
 }

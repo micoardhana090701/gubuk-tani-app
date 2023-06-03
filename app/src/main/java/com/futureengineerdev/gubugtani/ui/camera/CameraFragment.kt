@@ -147,5 +147,7 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSION = 10
+        const val EXTRA_DATA = "extra_data"
+
     }
 }
