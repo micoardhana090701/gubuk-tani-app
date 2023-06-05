@@ -1,14 +1,13 @@
 package com.futureengineerdev.gubugtani.api
 
 import com.futureengineerdev.gubugtani.article.ArticlesResponse
-import com.futureengineerdev.gubugtani.database.Articles
-import com.futureengineerdev.gubugtani.database.ArticlesResponseData
-import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.request.LoginRequest
 import com.futureengineerdev.gubugtani.request.RegisterRequest
 import com.futureengineerdev.gubugtani.response.ChoosingPlantResponse
 import com.futureengineerdev.gubugtani.response.LoginResponse
-import com.futureengineerdev.gubugtani.response.PlantsItem
+import com.futureengineerdev.gubugtani.response.PlantDiseaseResponse
+import com.futureengineerdev.gubugtani.response.PlantDiseaseResult
+import com.futureengineerdev.gubugtani.response.PlantDiseaseResultResponse
 import com.futureengineerdev.gubugtani.response.ProfileResponse
 
 import com.futureengineerdev.gubugtani.response.RegisterResponse
@@ -23,7 +22,6 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
-import retrofit2.http.PartMap
 import retrofit2.http.Query
 
 interface ApiService {
@@ -80,4 +78,16 @@ interface ApiService {
         @Header("Authorization") access_token: String,
     ): ChoosingPlantResponse
 
+    @Multipart
+    @POST("detection")
+    suspend fun getDetection(
+        @Header("Authorization") access_token: String,
+        @Part image : MultipartBody.Part?,
+        @Part("plant_id") plant_id: RequestBody,
+    ): PlantDiseaseResponse
+
+    @GET("detection")
+    suspend fun getResultDetection(
+        @Header("Authorization") access_token: String,
+    ) : Call<PlantDiseaseResultResponse>
 }

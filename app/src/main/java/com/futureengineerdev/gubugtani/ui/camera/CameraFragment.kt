@@ -2,6 +2,7 @@ package com.futureengineerdev.gubugtani.ui.camera
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,25 +23,47 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.futureengineerdev.gubugtani.DiseaseResultActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.databinding.ActivityHomeBinding
 import com.futureengineerdev.gubugtani.databinding.FragmentCameraBinding
 import com.futureengineerdev.gubugtani.databinding.FragmentComunityBinding
+import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
+import com.futureengineerdev.gubugtani.etc.reduceFileImage
 import com.futureengineerdev.gubugtani.etc.uriToFile
+import com.futureengineerdev.gubugtani.response.PlantsItem
 import com.futureengineerdev.gubugtani.ui.dashboard.ComunityViewModel
+import com.futureengineerdev.gubugtani.ui.profile.ProfileActivity
+import com.futureengineerdev.gubugtani.viewmodel.AddArticleViewModel
+import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class CameraFragment : AppCompatActivity(), View.OnClickListener{
 
     private var _binding: FragmentCameraBinding? = null
     private lateinit var currentPhotoPath: String
+    private lateinit var cameraViewModel: CameraViewModel
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
+
     private val binding get() = _binding!!
     private var getFile: File? = null
 
@@ -59,6 +82,7 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                 REQUEST_CODE_PERMISSION
             )
         }
+
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -66,6 +90,10 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
     }
 
     private fun setupView() {
+        val pref = UserPreferences.getInstance(dataStore)
+        val viewModelFactory = ViewModelFactory(pref)
+        viewModelFactory.setApplication(application)
+        cameraViewModel = ViewModelProvider(this, viewModelFactory)[CameraViewModel::class.java]
         with(binding){
             btnShowPopupCamera.setOnClickListener(this@CameraFragment)
             btnUploadFoto.setOnClickListener(this@CameraFragment)
@@ -75,6 +103,8 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
 
 
     override fun onClick(v: View?) {
+        val plantDisease = intent.getParcelableExtra<PlantsItem>(EXTRA_DATA)
+
         when(v){
             binding.btnShowPopupCamera -> {
                 val alertDialogBuilder = AlertDialog.Builder(this)
@@ -109,7 +139,9 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                 val alertDialog = alertDialogBuilder.create()
                 alertDialog.show()
             }
-            binding.btnUploadFoto -> uploadFoto()
+            binding.btnUploadFoto -> {startActivity(Intent(this@CameraFragment, DiseaseResultActivity::class.java))
+                uploadFoto(plantDisease!!)
+            }
             binding.btnBackUnggahFoto -> finish()
         }
     }
@@ -125,9 +157,23 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
         }
     }
 
+    private fun uploadFoto(plantDisease: PlantsItem) {
+        with(binding){
+            val plantId = plantDisease.id.toString().toRequestBody("text/plain".toMediaType())
+            if(getFile != null){
+                val file = reduceFileImage(getFile as File)
+                val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                val imageMultiPart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                    "image",
+                    file.name,
+                    requestImageFile
+                )
+                CoroutineScope(Dispatchers.IO).launch {
+                    cameraViewModel.upload(image = imageMultiPart, plant_id = plantId)
+                }
+            }
 
-    private fun uploadFoto() {
-        Toast.makeText(this, "Foto Telah Terupload", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private val inCamera = registerForActivityResult(

@@ -12,6 +12,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.futureengineerdev.gubugtani.DetailActivity
+import com.futureengineerdev.gubugtani.DiseaseResultActivity
 import com.futureengineerdev.gubugtani.HistoryActivity
 import com.futureengineerdev.gubugtani.LoginActivity
 import com.futureengineerdev.gubugtani.R
@@ -54,6 +56,7 @@ class ProfileActivity : AppCompatActivity() {
         profileViewModel = ViewModelProvider(this, viewModelFactory)[ProfileViewModel::class.java]
 
         val accessToken = pref.getUserKey().first()
+
 
         setupView()
         profileViewModel.getProfile(access_token = "Bearer $accessToken")
