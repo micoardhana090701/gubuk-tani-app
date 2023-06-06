@@ -2,6 +2,7 @@ package com.futureengineerdev.gubugtani.ui.home
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.futureengineerdev.gubugtani.ui.profile.ProfileActivity
 import com.futureengineerdev.gubugtani.R
@@ -145,12 +147,30 @@ class HomeFragment : Fragment() {
         }
     }
     private fun setupRecyclerView() {
+
         with(binding.rvArticleHome){
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(requireContext(), 3)
+            addItemDecoration(ItemSpacingDecoration(2))
             adapter = homeAdapter
         }
     }
+
+    class ItemSpacingDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            super.getItemOffsets(outRect, view, parent, state)
+            outRect.top = spacing
+            outRect.bottom = spacing
+            outRect.left = spacing
+            outRect.right = spacing
+        }
+    }
+
     private fun showLoading(isLoading: Boolean) {
         binding.isLoadingHome.visibility = if (isLoading) View.VISIBLE else View.GONE
     }

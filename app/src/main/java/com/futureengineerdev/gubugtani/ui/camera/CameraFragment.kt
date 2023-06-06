@@ -30,20 +30,25 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.futureengineerdev.gubugtani.DetailActivity
 import com.futureengineerdev.gubugtani.DiseaseResultActivity
+import com.futureengineerdev.gubugtani.HomeActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.databinding.ActivityHomeBinding
 import com.futureengineerdev.gubugtani.databinding.FragmentCameraBinding
 import com.futureengineerdev.gubugtani.databinding.FragmentComunityBinding
+import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
 import com.futureengineerdev.gubugtani.etc.reduceFileImage
 import com.futureengineerdev.gubugtani.etc.uriToFile
+import com.futureengineerdev.gubugtani.response.PlantDiseaseResult
 import com.futureengineerdev.gubugtani.response.PlantsItem
 import com.futureengineerdev.gubugtani.ui.dashboard.ComunityViewModel
 import com.futureengineerdev.gubugtani.ui.profile.ProfileActivity
 import com.futureengineerdev.gubugtani.viewmodel.AddArticleViewModel
+import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -82,7 +87,6 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                 REQUEST_CODE_PERMISSION
             )
         }
-
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -94,6 +98,7 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
         val viewModelFactory = ViewModelFactory(pref)
         viewModelFactory.setApplication(application)
         cameraViewModel = ViewModelProvider(this, viewModelFactory)[CameraViewModel::class.java]
+
         with(binding){
             btnShowPopupCamera.setOnClickListener(this@CameraFragment)
             btnUploadFoto.setOnClickListener(this@CameraFragment)
@@ -104,7 +109,6 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
 
     override fun onClick(v: View?) {
         val plantDisease = intent.getParcelableExtra<PlantsItem>(EXTRA_DATA)
-
         when(v){
             binding.btnShowPopupCamera -> {
                 val alertDialogBuilder = AlertDialog.Builder(this)
@@ -135,12 +139,12 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                     inGalery.launch(chooser)
                     dialogInterface.dismiss()
                 }
-
                 val alertDialog = alertDialogBuilder.create()
                 alertDialog.show()
             }
-            binding.btnUploadFoto -> {startActivity(Intent(this@CameraFragment, DiseaseResultActivity::class.java))
+            binding.btnUploadFoto -> {
                 uploadFoto(plantDisease!!)
+                getResultDisease()
             }
             binding.btnBackUnggahFoto -> finish()
         }
@@ -157,9 +161,9 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
         }
     }
 
-    private fun uploadFoto(plantDisease: PlantsItem) {
+    private fun uploadFoto(plantDiseaseUpload: PlantsItem) {
         with(binding){
-            val plantId = plantDisease.id.toString().toRequestBody("text/plain".toMediaType())
+            val plantId = plantDiseaseUpload.id.toString().toRequestBody("text/plain".toMediaType())
             if(getFile != null){
                 val file = reduceFileImage(getFile as File)
                 val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
@@ -171,10 +175,33 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                 CoroutineScope(Dispatchers.IO).launch {
                     cameraViewModel.upload(image = imageMultiPart, plant_id = plantId)
                 }
-            }
 
+            }
         }
     }
+
+    private fun getResultDisease(){
+        cameraViewModel.uploadDisease.observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                    showLoading(true)
+                }
+                is Resource.Success -> {
+                    val resultIntent = Intent(this, DiseaseResultActivity::class.java)
+
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it.data?.result?.detection?.result)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it.data?.result?.detection?.confidence)
+                    startActivity(resultIntent)
+                    showLoading(false)
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this,"Foto tidak valid", Toast.LENGTH_SHORT).show()
+                    showLoading(false)
+                }
+            }
+        }
+    }
+
 
     private val inCamera = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -190,10 +217,15 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
             }
         }
     }
+
+    private fun showLoading(isLoadingLogin: Boolean){
+        binding.isLoadingUploadDisease.visibility = if (isLoadingLogin) View.VISIBLE else View.GONE
+        binding.btnUploadFoto.isEnabled = !isLoadingLogin
+    }
+
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSION = 10
         const val EXTRA_DATA = "extra_data"
-
     }
 }

@@ -17,32 +17,32 @@ import retrofit2.Call
 import retrofit2.Response
 
 class DiseaseResultViewModel(private val preferences: UserPreferences): ViewModel() {
-    private val _getDisease = MutableLiveData<Resource<PlantDiseaseResultResponse>>()
-    val getDisease : MutableLiveData<Resource<PlantDiseaseResultResponse>> = _getDisease
-
-    suspend fun getResultDisease(access_token: String){
-        _getDisease.postValue(Resource.Loading())
-        val accessToken = "Bearer ${preferences.getUserKey().first()}"
-        ApiConfig.apiInstance.getResultDetection(access_token = accessToken).enqueue(object : Callback<PlantDiseaseResultResponse> {
-            override fun onResponse(
-                call: Call<PlantDiseaseResultResponse>,
-                response: Response<PlantDiseaseResultResponse>
-            ) {
-                if (response.isSuccessful){
-                    val data = response.body()
-                    if(data != null){
-                        _getDisease.postValue(Resource.Success(data))
-                    }
-                }
-                else{
-                    Log.e("Error: ", "onFailure : ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<PlantDiseaseResultResponse>, t: Throwable) {
-                Log.d(ContentValues.TAG, "On failure : ${t.message}")
-            }
-
-        })
-    }
+//    private val _getDisease = MutableLiveData<Resource<PlantDiseaseResultResponse>>()
+//    val getDisease : MutableLiveData<Resource<PlantDiseaseResultResponse>> = _getDisease
+//
+//    suspend fun getResultDisease(access_token: String){
+//        _getDisease.postValue(Resource.Loading())
+//        val accessToken = "Bearer ${preferences.getUserKey().first()}"
+//        ApiConfig.apiInstance.getResultDetection(access_token = accessToken).enqueue(object : Callback<PlantDiseaseResultResponse> {
+//            override fun onResponse(
+//                call: Call<PlantDiseaseResultResponse>,
+//                response: Response<PlantDiseaseResultResponse>
+//            ) {
+//                if (response.isSuccessful){
+//                    val data = response.body()
+//                    if(data != null){
+//                        _getDisease.postValue(Resource.Success(data))
+//                    }
+//                }
+//                else{
+//                    Log.e("Error: ", "onFailure : ${response.message()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<PlantDiseaseResultResponse>, t: Throwable) {
+//                Log.d(ContentValues.TAG, "On failure : ${t.message}")
+//            }
+//
+//        })
+//    }
 }

@@ -32,7 +32,6 @@ class ChooseActivity : AppCompatActivity() {
     private val binding get() = _binding!!
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
     private lateinit var plantViewModel: PlantViewModel
-    private lateinit var recyclerView: RecyclerView
     private lateinit var plantAdapter : PlantAdapter
 
 
@@ -44,9 +43,6 @@ class ChooseActivity : AppCompatActivity() {
 
         binding.btnBackChoose.setOnClickListener {
             finish()
-        }
-        binding.btnSementara.setOnClickListener{
-            startActivity(Intent(this, CameraFragment::class.java))
         }
         val pref = UserPreferences.getInstance(dataStore)
         val viewModelFactory = ViewModelFactory(pref)

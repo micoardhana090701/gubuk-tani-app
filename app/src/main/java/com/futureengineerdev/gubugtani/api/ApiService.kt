@@ -4,6 +4,7 @@ import com.futureengineerdev.gubugtani.article.ArticlesResponse
 import com.futureengineerdev.gubugtani.request.LoginRequest
 import com.futureengineerdev.gubugtani.request.RegisterRequest
 import com.futureengineerdev.gubugtani.response.ChoosingPlantResponse
+import com.futureengineerdev.gubugtani.response.Detection
 import com.futureengineerdev.gubugtani.response.LoginResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResult
@@ -86,8 +87,9 @@ interface ApiService {
         @Part("plant_id") plant_id: RequestBody,
     ): PlantDiseaseResponse
 
-    @GET("detection")
-    suspend fun getResultDetection(
+    @POST("detection")
+    suspend fun getDetectionResult(
         @Header("Authorization") access_token: String,
-    ) : Call<PlantDiseaseResultResponse>
+        @Body plantDiseaseResult: Detection,
+    ): Call<PlantDiseaseResultResponse>
 }
