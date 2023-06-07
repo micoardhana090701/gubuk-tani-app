@@ -188,14 +188,16 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                 }
                 is Resource.Success -> {
                     val resultIntent = Intent(this, DiseaseResultActivity::class.java)
-
                     resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it.data?.result?.detection?.result)
                     resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it.data?.result?.detection?.confidence)
                     startActivity(resultIntent)
                     showLoading(false)
                 }
                 is Resource.Error -> {
-                    Toast.makeText(this,"Foto tidak valid", Toast.LENGTH_SHORT).show()
+                    val resultIntent = Intent(this, DiseaseResultActivity::class.java)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it.data?.meta?.message)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it.data?.meta?.status)
+                    startActivity(resultIntent)
                     showLoading(false)
                 }
             }

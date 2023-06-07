@@ -23,6 +23,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".DetailDisease"
+            android:exported="false" />
+        <activity
             android:name=".DiseaseResultActivity"
             android:exported="false" />
         <activity

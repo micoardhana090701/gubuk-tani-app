@@ -1,10 +1,12 @@
 package com.futureengineerdev.gubugtani.api
 
 import com.futureengineerdev.gubugtani.article.ArticlesResponse
+import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.request.LoginRequest
 import com.futureengineerdev.gubugtani.request.RegisterRequest
 import com.futureengineerdev.gubugtani.response.ChoosingPlantResponse
 import com.futureengineerdev.gubugtani.response.Detection
+import com.futureengineerdev.gubugtani.response.DiseaseResponse
 import com.futureengineerdev.gubugtani.response.LoginResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResult
@@ -92,4 +94,9 @@ interface ApiService {
         @Header("Authorization") access_token: String,
         @Body plantDiseaseResult: Detection,
     ): Call<PlantDiseaseResultResponse>
+
+    @GET("disease")
+    suspend fun getDisease(
+        @Header("Authorization") access_token: String,
+    ): DiseaseResponse
 }

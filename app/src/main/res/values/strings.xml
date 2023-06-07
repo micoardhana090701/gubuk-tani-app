@@ -11,6 +11,8 @@
     <string name="company_name">Develop by :\nFuture Engineer Dev</string>
     <string name="welcome">Selamat Datang! \nSilahkan masuk terlebih dahulu</string>
     <string name="welcome_daftar">Selamat Datang! \nSilahkan daftar terlebih dahulu</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

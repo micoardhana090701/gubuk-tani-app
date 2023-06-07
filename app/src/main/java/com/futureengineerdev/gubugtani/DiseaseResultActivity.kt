@@ -4,34 +4,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.databinding.ActivityDiseaseResultBinding
-import com.futureengineerdev.gubugtani.databinding.ActivityLoginBinding
-import com.futureengineerdev.gubugtani.databinding.ActivityRegisterBinding
-import com.futureengineerdev.gubugtani.etc.Resource
-import com.futureengineerdev.gubugtani.etc.UserPreferences
-import com.futureengineerdev.gubugtani.response.PlantDiseaseDetection
-import com.futureengineerdev.gubugtani.response.PlantDiseaseResponse
-import com.futureengineerdev.gubugtani.response.PlantsItem
-import com.futureengineerdev.gubugtani.response.ResultPlantDisease
-import com.futureengineerdev.gubugtani.response.User
-import com.futureengineerdev.gubugtani.ui.camera.CameraFragment
-import com.futureengineerdev.gubugtani.ui.camera.CameraViewModel
-import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
-import com.futureengineerdev.gubugtani.viewmodel.DiseaseResultViewModel
-import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody
 
 class DiseaseResultActivity : AppCompatActivity() {
 
@@ -53,9 +29,17 @@ class DiseaseResultActivity : AppCompatActivity() {
 
         val resultDisease = intent.getStringExtra(DiseaseResultActivity.EXTRA_RESULT)
         val confidenceDisease = intent.getStringExtra(DiseaseResultActivity.EXTRA_CONFIDENCE)
-
         binding.tvResultDisease.setText(resultDisease.toString())
         binding.tvAkurasi.setText(confidenceDisease.toString())
+
+        if (resultDisease.toString() == "Healthy"){
+            binding.imageView4.setImageResource(R.drawable.outline_check_circle_24)
+            binding.textView10.setText("Tanaman Anda Sehat")
+        } else{
+            binding.imageView4.setImageResource(R.drawable.outline_warning_amber_24)
+            binding.textView10.setText("Penyakit Tanaman Anda adalah")
+        }
+
 
         binding.btnBackResult.setOnClickListener{
             startActivity(Intent(this, HomeActivity::class.java))

@@ -6,8 +6,8 @@
     <dimen name="size_logo">130dp</dimen>
     <dimen name="size_circle_image">64dp</dimen>
     <dimen name="margin_start_end">7dp</dimen>
-    <dimen name="text_small">12dp</dimen>
-    <dimen name="text_medium">14dp</dimen>
-    <dimen name="text_big">16dp</dimen>
-    <dimen name="text_extra_big">18dp</dimen>
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="text_medium">14sp</dimen>
+    <dimen name="text_big">16sp</dimen>
+    <dimen name="text_extra_big">18sp</dimen>
 </resources>

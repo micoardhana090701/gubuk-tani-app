@@ -72,34 +72,37 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-                        <View
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/view2"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:background="@color/light_green"
-                            app:layout_constraintTop_toBottomOf="@+id/view" />
-
-                        <TextView
-                            android:id="@+id/penyakitterkini"
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="24dp"
-                            android:text="Penyakit Terkini"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_extra_big"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/view" />
+                            android:background="@color/light_green"
+                            app:layout_constraintTop_toBottomOf="@+id/view" >
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="90dp"
-                            android:layout_margin="24dp"
-                            android:layout_marginTop="24dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/penyakitterkini" />
+                            <TextView
+                                android:id="@+id/penyakitterkini"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="24dp"
+                                android:text="Penyakit Terkini"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_extra_big"
+                                android:textStyle="bold"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="24dp"
+                                android:layout_marginTop="24dp"
+                                app:layout_constraintBottom_toBottomOf="@+id/view2"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/penyakitterkini" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
                             android:id="@+id/artikelterkini"

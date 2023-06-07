@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.futureengineerdev.gubugtani.UpdateActivity
+import com.futureengineerdev.gubugtani.disease.DiseaseViewModel
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.plant.PlantViewModel
 import com.futureengineerdev.gubugtani.ui.camera.CameraViewModel
@@ -24,7 +25,7 @@ class ViewModelFactory(private val pref: UserPreferences): ViewModelProvider.New
             AddArticleViewModel::class.java -> AddArticleViewModel(pref) as T
             PlantViewModel::class.java -> PlantViewModel(pref) as T
             CameraViewModel::class.java -> CameraViewModel(pref) as T
-            DiseaseResultViewModel::class.java -> DiseaseResultViewModel(pref) as T
+            DiseaseViewModel::class.java -> DiseaseViewModel(pref) as T
 
             else -> throw  IllegalAccessException("Unknown ViewModel class: "+ modelClass.name)
         }
