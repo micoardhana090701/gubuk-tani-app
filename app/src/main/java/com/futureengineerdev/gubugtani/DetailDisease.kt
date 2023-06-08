@@ -1,8 +1,12 @@
 package com.futureengineerdev.gubugtani
 
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.preference.DialogPreference
 import com.bumptech.glide.Glide
 import com.futureengineerdev.gubugtani.databinding.ActivityDetailDiseaseBinding
@@ -14,6 +18,7 @@ class DetailDisease : AppCompatActivity() {
 
     private var _binding: ActivityDetailDiseaseBinding? = null
     private val binding get() = _binding!!
+    private var frameLayoutVisible = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +49,8 @@ class DetailDisease : AppCompatActivity() {
         binding.btnBackDetailDisease.setOnClickListener{
             finish()
         }
+
+
         binding.btnPenanganan.setOnClickListener {
             val targetFragment = ArticleIncludedFragment()
             val bundle = Bundle().apply {
@@ -54,7 +61,50 @@ class DetailDisease : AppCompatActivity() {
             fragmentTransaction.replace(R.id.container_detail_disease, targetFragment)
             fragmentTransaction.commit()
 
+            binding.btnPenanganan.visibility = View.GONE
+            binding.btnTutupPenanganan.visibility = View.VISIBLE
+            swipeUp()
+
+            binding.btnTutupPenanganan.setOnClickListener {
+                swipeDown()
+                binding.btnPenanganan.visibility = View.VISIBLE
+                binding.btnTutupPenanganan.visibility = View.GONE
+            }
         }
+    }
+
+    private fun swipeUp(){
+        val slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up)
+        binding.containerDetailDisease.startAnimation(slideUp)
+        slideUp.setAnimationListener(object : Animation.AnimationListener{
+            override fun onAnimationStart(animation: Animation?) {
+                binding.containerDetailDisease.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {
+            }
+
+        })
+    }
+
+    private fun swipeDown(){
+        val slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down)
+        binding.containerDetailDisease.startAnimation(slideDown)
+        slideDown.setAnimationListener(object : Animation.AnimationListener{
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                binding.containerDetailDisease.visibility = View.GONE
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {
+            }
+
+        })
     }
 
 
