@@ -14,6 +14,7 @@ import com.futureengineerdev.gubugtani.response.Detection
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResult
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResultResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Callback
@@ -24,8 +25,8 @@ import retrofit2.Response
 
 class CameraViewModel(private val preferences: UserPreferences) : ViewModel() {
 
-    private val _uploadDisease = MutableLiveData<Resource<PlantDiseaseResponse>>()
-    val uploadDisease : LiveData<Resource<PlantDiseaseResponse>> = _uploadDisease
+    private val _uploadDisease = MutableLiveData<PlantDiseaseResponse>()
+    val uploadDisease : LiveData<PlantDiseaseResponse> = _uploadDisease
 
     private val _getDisease = MutableLiveData<Resource<Detection>>()
     val getDisease : LiveData<Resource<Detection>> = _getDisease
@@ -37,35 +38,29 @@ class CameraViewModel(private val preferences: UserPreferences) : ViewModel() {
     ){
         val accessToken = "Bearer ${preferences.getUserKey().first()}"
         viewModelScope.launch {
-            _uploadDisease.postValue(Resource.Loading())
-            ApiConfig.apiInstance.getDetection(accessToken, image = image, plant_id = plant_id).let {
-                if (Resource.Success(it) != null){
-                    _uploadDisease.postValue(Resource.Success(it))
-                }else{
-                    _uploadDisease.postValue(Resource.Error(it.meta?.message))
+            ApiConfig.apiInstance.getDetection(accessToken, image = image, plant_id = plant_id).let {response ->
+                if (response.isSuccessful){
+                    if (response.body() != null){
+                        val result = response.body()
+                        _uploadDisease.postValue(result!!)
+                    }
+                }
+                else if (response.code() == 400){
+                    val errorResponse = Gson().fromJson(
+                        response.errorBody()?.charStream(),
+                        PlantDiseaseResponse::class.java
+                    )
+                    _uploadDisease.postValue(errorResponse)
+                }
+                else{
+                    val errorResponse = Gson().fromJson(
+                        response.errorBody()?.charStream(),
+                        PlantDiseaseResponse::class.java
+                    )
+                    _uploadDisease.postValue(errorResponse)
                 }
             }
         }
     }
-    suspend fun getResultDisease(
-        confidence: String,
-        resultDisease: String,
-    ){
-        val accessToken ="Bearer ${preferences.getUserKey().first()}"
-        _uploadDisease.postValue(Resource.Loading())
-        ApiConfig.apiInstance.getDetectionResult(accessToken, Detection(confidence, resultDisease)).enqueue(object : Callback<PlantDiseaseResultResponse> {
-            override fun onResponse(call: Call<PlantDiseaseResultResponse>, response: Response<PlantDiseaseResultResponse>) {
-                if (response.isSuccessful) {
-                    val result = response.body()?.result?.detection
-                    _getDisease.postValue(Resource.Success(result))
-                } else {
-                    _uploadDisease.postValue(Resource.Error(response.body()?.meta?.message))
-                }
-            }
 
-            override fun onFailure(call: Call<PlantDiseaseResultResponse>, t: Throwable) {
-                _uploadDisease.postValue(Resource.Error(t.message))
-            }
-        })
-    }
 }

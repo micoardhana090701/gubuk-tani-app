@@ -8,17 +8,17 @@ import com.google.gson.annotations.SerializedName
 data class PlantDiseaseResponse(
 
 	@field:SerializedName("result")
-	val result: ResultPlantDisease,
+	val result: ResultPlantDisease?= null,
 
 	@field:SerializedName("meta")
-	val meta: MetaPlantDisease
+	val meta: MetaPlantDisease?
 ) : Parcelable
 
 @Parcelize
 data class ResultPlantDisease(
 
 	@field:SerializedName("detection")
-	val detection: Detection,
+	val detection: Detection?,
 
 //	@field:SerializedName("disease")
 //	val disease: String? = null
@@ -28,10 +28,10 @@ data class ResultPlantDisease(
 data class Detection(
 
 	@field:SerializedName("result")
-	val result: String,
+	val result: String?,
 
 	@field:SerializedName("confidence")
-	val confidence: String,
+	val confidence: String?,
 
 ) : Parcelable
 

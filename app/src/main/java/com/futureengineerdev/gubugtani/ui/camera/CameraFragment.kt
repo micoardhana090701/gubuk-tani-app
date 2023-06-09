@@ -11,6 +11,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -144,6 +145,7 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
             }
             binding.btnUploadFoto -> {
                 uploadFoto(plantDisease!!)
+                showLoading(true)
                 getResultDisease()
             }
             binding.btnBackUnggahFoto -> finish()
@@ -175,32 +177,29 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                 CoroutineScope(Dispatchers.IO).launch {
                     cameraViewModel.upload(image = imageMultiPart, plant_id = plantId)
                 }
-
             }
         }
     }
 
     private fun getResultDisease(){
-        cameraViewModel.uploadDisease.observe(this) {
-            when (it) {
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
-                is Resource.Success -> {
+        cameraViewModel.uploadDisease.observe(this){
+            try {
+                if (it.result != null){
                     val resultIntent = Intent(this, DiseaseResultActivity::class.java)
-                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it.data?.result?.detection?.result)
-                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it.data?.result?.detection?.confidence)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it.result?.detection?.result)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it.result?.detection?.confidence)
                     startActivity(resultIntent)
-                    showLoading(false)
-                }
-                is Resource.Error -> {
+                } else {
                     val resultIntent = Intent(this, DiseaseResultActivity::class.java)
-                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it.data?.meta?.message)
-                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it.data?.meta?.status)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it?.meta?.message)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it?.meta?.status)
                     startActivity(resultIntent)
-                    showLoading(false)
                 }
+                showLoading(false)
+            }catch (e: Exception) {
+                showLoading(false)
             }
+
         }
     }
 

@@ -19,6 +19,7 @@ import com.futureengineerdev.gubugtani.response.UploadArticleResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -87,7 +88,7 @@ interface ApiService {
         @Header("Authorization") access_token: String,
         @Part image : MultipartBody.Part?,
         @Part("plant_id") plant_id: RequestBody,
-    ): PlantDiseaseResponse
+    ): Response<PlantDiseaseResponse>
 
     @POST("detection")
     suspend fun getDetectionResult(
