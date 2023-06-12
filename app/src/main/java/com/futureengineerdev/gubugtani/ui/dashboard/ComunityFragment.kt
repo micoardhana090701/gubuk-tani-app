@@ -32,12 +32,10 @@ class ComunityFragment() : Fragment() {
 
     private var _binding: FragmentComunityBinding? = null
     private val binding get() = _binding!!
-    private var apiConfig = ApiConfig.apiInstance
     private val articleAdapter = ArticleAdapter()
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
     private lateinit var comunityViewModel: ComunityViewModel
     private lateinit var authViewModel: AuthViewModel
-    private var mShouldFinish = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -119,6 +117,7 @@ class ComunityFragment() : Fragment() {
             }
         }
     }
+
     private fun showLoading(isLoadingLogin: Boolean){
         binding.isLoadingSearch.visibility = if (isLoadingLogin) View.VISIBLE else View.GONE
         binding.btnSearch.isEnabled = !isLoadingLogin
@@ -128,5 +127,6 @@ class ComunityFragment() : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 
 }

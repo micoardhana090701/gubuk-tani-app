@@ -18,7 +18,6 @@ class DetailDisease : AppCompatActivity() {
 
     private var _binding: ActivityDetailDiseaseBinding? = null
     private val binding get() = _binding!!
-    private var frameLayoutVisible = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

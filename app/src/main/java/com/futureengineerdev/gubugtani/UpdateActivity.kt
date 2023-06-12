@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -116,6 +117,7 @@ class UpdateActivity : AppCompatActivity(){
         }
         getUserDefault()
         binding.btnSendUpdate.setOnClickListener{
+            showLoadingUpdate(true)
             CoroutineScope(Dispatchers.IO).launch {
                 uploadAll()
             }
@@ -156,32 +158,37 @@ class UpdateActivity : AppCompatActivity(){
     }
 
     private suspend fun uploadAll() {
-        if (getFile != null) {
-            val file = reduceFileImage(getFile as File)
-            val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-            val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-            val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        try{
+            if (getFile != null) {
+                val file = reduceFileImage(getFile as File)
+                val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
 
-            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                "avatar",
-                file.name,
-                requestImageFile
-            )
-            CoroutineScope(Dispatchers.IO).launch {
-                profileViewModel.updateAll(imageMultipart=imageMultipart, username=username, name=name, city=city)
+                val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                    "avatar",
+                    file.name,
+                    requestImageFile
+                )
+                CoroutineScope(Dispatchers.IO).launch {
+                    profileViewModel.updateAll(imageMultipart=imageMultipart, username=username, name=name, city=city)
+                }
+                finish()
+            } else{
+                val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                CoroutineScope(Dispatchers.IO).launch {
+                    profileViewModel.updateData(username=username, name=name, city=city)
+                }
+                finish()
             }
             showLoadingUpdate(false)
-            finish()
-        } else{
-            val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-            val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-            val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-            CoroutineScope(Dispatchers.IO).launch {
-                profileViewModel.updateData(username=username, name=name, city=city)
-            }
-            finish()
+        } catch (e: Exception){
+            Log.e("Error", e.toString())
         }
+
     }
 
 

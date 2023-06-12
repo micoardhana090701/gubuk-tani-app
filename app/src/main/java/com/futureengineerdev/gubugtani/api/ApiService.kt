@@ -4,7 +4,9 @@ import com.futureengineerdev.gubugtani.article.ArticlesResponse
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.request.LoginRequest
 import com.futureengineerdev.gubugtani.request.RegisterRequest
+import com.futureengineerdev.gubugtani.response.AddCommentResponse
 import com.futureengineerdev.gubugtani.response.ChoosingPlantResponse
+import com.futureengineerdev.gubugtani.response.CommentAddComment
 import com.futureengineerdev.gubugtani.response.Detection
 import com.futureengineerdev.gubugtani.response.DiseaseResponse
 import com.futureengineerdev.gubugtani.response.LoginResponse
@@ -12,7 +14,6 @@ import com.futureengineerdev.gubugtani.response.PlantDiseaseResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResult
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResultResponse
 import com.futureengineerdev.gubugtani.response.ProfileResponse
-
 import com.futureengineerdev.gubugtani.response.RegisterResponse
 import com.futureengineerdev.gubugtani.response.UpdateResponse
 import com.futureengineerdev.gubugtani.response.UploadArticleResponse
@@ -26,6 +27,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -90,14 +92,17 @@ interface ApiService {
         @Part("plant_id") plant_id: RequestBody,
     ): Response<PlantDiseaseResponse>
 
-    @POST("detection")
-    suspend fun getDetectionResult(
-        @Header("Authorization") access_token: String,
-        @Body plantDiseaseResult: Detection,
-    ): Call<PlantDiseaseResultResponse>
-
     @GET("disease")
     suspend fun getDisease(
         @Header("Authorization") access_token: String,
     ): DiseaseResponse
+
+    @Multipart
+    @POST("article/{article_id}/comment")
+    suspend fun addComment(
+        @Header("Authorization") access_token: String,
+        @Path("article_id") articleId: Int,
+        @Part("comment") comment: RequestBody,
+    ): AddCommentResponse
+
 }

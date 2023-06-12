@@ -9,6 +9,7 @@ import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.plant.PlantViewModel
 import com.futureengineerdev.gubugtani.ui.camera.CameraViewModel
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
+import org.w3c.dom.Comment
 
 class ViewModelFactory(private val pref: UserPreferences): ViewModelProvider.NewInstanceFactory() {
     private lateinit var _Application: Application
@@ -26,6 +27,8 @@ class ViewModelFactory(private val pref: UserPreferences): ViewModelProvider.New
             PlantViewModel::class.java -> PlantViewModel(pref) as T
             CameraViewModel::class.java -> CameraViewModel(pref) as T
             DiseaseViewModel::class.java -> DiseaseViewModel(pref) as T
+            CommentViewModel::class.java -> CommentViewModel(pref) as T
+            AddCommentViewModel::class.java -> AddCommentViewModel(pref) as T
 
             else -> throw  IllegalAccessException("Unknown ViewModel class: "+ modelClass.name)
         }
