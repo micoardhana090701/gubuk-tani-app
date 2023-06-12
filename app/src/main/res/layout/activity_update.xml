@@ -53,6 +53,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:hint="Ubah nama"
+        android:textSize="@dimen/text_big"
+        android:inputType="text"
         app:layout_constraintTop_toBottomOf="@+id/constrainLayout23"
         app:layout_constraintEnd_toEndOf="parent"
         icon:username="true"
@@ -63,6 +65,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
+        android:textSize="@dimen/text_big"
+        android:inputType="text"
         android:hint="Ubah Username"
         icon:username="true"
         app:layout_constraintTop_toBottomOf="@+id/etNamaUpdate" />
@@ -71,6 +75,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Ubah Kota"
+        android:inputType="text"
+        android:textSize="@dimen/text_big"
         android:layout_margin="24dp"
         icon:city="true"
         app:layout_constraintTop_toBottomOf="@+id/etUsernameUpdate"/>

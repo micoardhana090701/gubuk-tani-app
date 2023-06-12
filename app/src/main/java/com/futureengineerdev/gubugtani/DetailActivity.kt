@@ -1,7 +1,6 @@
 package com.futureengineerdev.gubugtani
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -11,20 +10,15 @@ import android.widget.ImageView
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bumptech.glide.Glide
+import com.futureengineerdev.gubugtani.comment.CommentFragment
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.databinding.ActivityDetailBinding
-import com.futureengineerdev.gubugtani.etc.UserPreferences
-import com.futureengineerdev.gubugtani.viewmodel.CommentViewModel
-import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
 
 class DetailActivity : AppCompatActivity(), View.OnClickListener{
 
     private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
-    private lateinit var commentViewModel : CommentViewModel
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
     private var imageScaleZoom = true
 

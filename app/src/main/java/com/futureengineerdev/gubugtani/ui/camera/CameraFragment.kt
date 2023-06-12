@@ -144,8 +144,8 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                 alertDialog.show()
             }
             binding.btnUploadFoto -> {
-                uploadFoto(plantDisease!!)
                 showLoading(true)
+                uploadFoto(plantDisease!!)
                 getResultDisease()
             }
             binding.btnBackUnggahFoto -> finish()
@@ -177,6 +177,9 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                 CoroutineScope(Dispatchers.IO).launch {
                     cameraViewModel.upload(image = imageMultiPart, plant_id = plantId)
                 }
+            }else{
+                Toast.makeText(this@CameraFragment, "Gambar tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                showLoading(false)
             }
         }
     }

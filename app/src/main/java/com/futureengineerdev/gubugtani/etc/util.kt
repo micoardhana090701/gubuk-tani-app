@@ -49,7 +49,6 @@ fun uriToFile(selectedImg: Uri, context: Context): File {
     while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
     outputStream.close()
     inputStream.close()
-
     return myFile
 }
 

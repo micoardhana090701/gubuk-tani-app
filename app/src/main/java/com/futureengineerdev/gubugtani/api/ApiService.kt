@@ -9,6 +9,7 @@ import com.futureengineerdev.gubugtani.response.ChoosingPlantResponse
 import com.futureengineerdev.gubugtani.response.CommentAddComment
 import com.futureengineerdev.gubugtani.response.Detection
 import com.futureengineerdev.gubugtani.response.DiseaseResponse
+import com.futureengineerdev.gubugtani.response.GetCommentResponse
 import com.futureengineerdev.gubugtani.response.LoginResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResult
@@ -105,4 +106,9 @@ interface ApiService {
         @Part("comment") comment: RequestBody,
     ): AddCommentResponse
 
+    @GET("article/{article_id}/comment")
+    suspend fun getComment(
+        @Header("Authorization") access_token: String,
+        @Path("article_id") articleId: Int,
+    ): GetCommentResponse
 }

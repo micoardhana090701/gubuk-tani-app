@@ -74,7 +74,7 @@ class UpdateActivity : AppCompatActivity(){
         profileViewModel.updateUser.observe(this){
             if (it != null){
                 Toast.makeText(this, "Akun Telah di Update", Toast.LENGTH_SHORT).show()
-                showLoadingUpdate(true)
+                showLoadingUpdate(false)
             }
         }
 
@@ -117,9 +117,10 @@ class UpdateActivity : AppCompatActivity(){
         }
         getUserDefault()
         binding.btnSendUpdate.setOnClickListener{
-            showLoadingUpdate(true)
-            CoroutineScope(Dispatchers.IO).launch {
+
+            lifecycleScope.launch {
                 uploadAll()
+                showLoadingUpdate(true)
             }
         }
 
@@ -174,7 +175,6 @@ class UpdateActivity : AppCompatActivity(){
                 CoroutineScope(Dispatchers.IO).launch {
                     profileViewModel.updateAll(imageMultipart=imageMultipart, username=username, name=name, city=city)
                 }
-                finish()
             } else{
                 val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
                 val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
@@ -182,31 +182,29 @@ class UpdateActivity : AppCompatActivity(){
                 CoroutineScope(Dispatchers.IO).launch {
                     profileViewModel.updateData(username=username, name=name, city=city)
                 }
-                finish()
             }
-            showLoadingUpdate(false)
         } catch (e: Exception){
             Log.e("Error", e.toString())
+            showLoadingUpdate(false)
         }
 
     }
 
-
-
     private val inCamera = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ){
-        if(it.resultCode == RESULT_OK){
+        if (it.resultCode == RESULT_OK){
             val myFile = File(currentPhotoPath)
             val options = BitmapFactory.Options()
             val bitmap = BitmapFactory.decodeFile(currentPhotoPath, options)
-            myFile.let{ file ->
+            myFile.let { file ->
                 val fix = fixImageRotation(bitmap, file.path)
                 getFile = file
                 binding.ivFotoUpdate.setImageBitmap(fix)
             }
         }
     }
+
     private val inGalery = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ){result ->
