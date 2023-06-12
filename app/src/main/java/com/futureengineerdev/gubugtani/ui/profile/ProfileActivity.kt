@@ -12,9 +12,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.futureengineerdev.gubugtani.DetailActivity
-import com.futureengineerdev.gubugtani.DiseaseResultActivity
-import com.futureengineerdev.gubugtani.HistoryActivity
+import com.futureengineerdev.gubugtani.history.HistoryActivity
 import com.futureengineerdev.gubugtani.LoginActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.UpdateActivity
@@ -65,6 +63,11 @@ class ProfileActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     showLoading(false)
                     if (it != null){
+                        val userIdIntent = Intent(this, HistoryActivity::class.java)
+                        userIdIntent.putExtra(HistoryActivity.EXTRA_USER_ID, it.data?.result?.user?.id)
+                        binding.btnHistory.setOnClickListener{
+                            startActivity(userIdIntent)
+                        }
                         binding.tvEmail.setText(it.data?.result?.user?.email)
                         binding.tvUsername.setText(it.data?.result?.user?.name)
                         val ivFotoProfile = binding.ivFotoProfil

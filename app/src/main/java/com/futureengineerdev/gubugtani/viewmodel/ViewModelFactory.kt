@@ -3,14 +3,13 @@ package com.futureengineerdev.gubugtani.viewmodel
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.futureengineerdev.gubugtani.UpdateActivity
 import com.futureengineerdev.gubugtani.comment.GetCommentViewModel
 import com.futureengineerdev.gubugtani.disease.DiseaseViewModel
 import com.futureengineerdev.gubugtani.etc.UserPreferences
+import com.futureengineerdev.gubugtani.history.HistoryViewModel
 import com.futureengineerdev.gubugtani.plant.PlantViewModel
 import com.futureengineerdev.gubugtani.ui.camera.CameraViewModel
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
-import org.w3c.dom.Comment
 
 class ViewModelFactory(private val pref: UserPreferences): ViewModelProvider.NewInstanceFactory() {
     private lateinit var _Application: Application
@@ -30,6 +29,7 @@ class ViewModelFactory(private val pref: UserPreferences): ViewModelProvider.New
             DiseaseViewModel::class.java -> DiseaseViewModel(pref) as T
             GetCommentViewModel::class.java -> GetCommentViewModel(pref) as T
             AddCommentViewModel::class.java -> AddCommentViewModel(pref) as T
+            HistoryViewModel::class.java -> HistoryViewModel(pref) as T
 
             else -> throw  IllegalAccessException("Unknown ViewModel class: "+ modelClass.name)
         }
