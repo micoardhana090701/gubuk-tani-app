@@ -10,7 +10,6 @@
         android:layout_height="42dp"
         android:layout_margin="24dp"
         android:src="@drawable/baseline_person_24"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,11 +33,22 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="24dp"
+
         android:text="hallo ini komentar saya ges"
         android:textSize="@dimen/text_small"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivUserComment"
         app:layout_constraintTop_toBottomOf="@+id/tvNameComment" />
+
+    <TextView
+        android:id="@+id/tvTimeComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:text="2 hari yang lalu"
+        android:layout_marginBottom="24dp"
+        android:textSize="@dimen/text_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivUserComment"
+        app:layout_constraintTop_toBottomOf="@+id/tvComment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -130,6 +130,8 @@ class CommentFragment : Fragment() {
         commentAdapter.notifyDataSetChanged()
         var swipeRefreshLayout = binding.swipeRefreshComment
         swipeRefreshLayout.isRefreshing = false
+        val itemCount = commentAdapter.itemCount
+        binding.tvItemComment.text = itemCount.toString()
     }
     private fun refresh(){
         viewLifecycleOwner.lifecycleScope.launch {

@@ -104,7 +104,7 @@ data class DataItemComment(
 	val userId: Int? = null,
 
 	@field:SerializedName("created_at")
-	val createdAt: String? = null,
+	val createdAt: String? = System.currentTimeMillis().toString(),
 
 	@field:SerializedName("comment")
 	val comment: String? = null,

@@ -5,8 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.futureengineerdev.gubugtani.R
+import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.databinding.ItemCommentBinding
 import com.futureengineerdev.gubugtani.response.DataItemComment
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class CommentAdapter (private val commentList: List<DataItemComment>): RecyclerView.Adapter<CommentAdapter.ViewHolder>(){
 
@@ -15,6 +18,7 @@ class CommentAdapter (private val commentList: List<DataItemComment>): RecyclerV
             with(binding){
                 tvNameComment.setText(comment.user?.name)
                 tvComment.setText(comment.comment)
+                tvTimeComment.setText(getTimeAgo(comment))
                 val loadImageComment = comment.user?.avatar
                 if (loadImageComment != null) {
                     Glide.with(itemView.context)
@@ -43,5 +47,27 @@ class CommentAdapter (private val commentList: List<DataItemComment>): RecyclerV
 
     override fun getItemCount(): Int {
         return commentList.size
+    }
+    fun getTimeAgo(comment: DataItemComment): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val currentTime = System.currentTimeMillis()
+        val uploadTime = dateFormat.parse(comment.createdAt)?.time ?: currentTime
+
+        val timeDiff = currentTime - uploadTime
+        val seconds = timeDiff / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+        val months = days / 30
+        val years = months / 12
+
+        return when {
+            years > 0 -> "$years tahun yang lalu"
+            months > 0 -> "$months bulan yang lalu"
+            days > 0 -> "$days hari yang lalu"
+            hours > 0 -> "$hours jam yang lalu"
+            minutes > 0 -> "$minutes menit yang lalu"
+            else -> "$seconds detik yang lalu"
+        }
     }
 }
