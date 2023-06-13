@@ -35,6 +35,9 @@ class HistoryActivity : AppCompatActivity() {
         lifecycleScope.launch{
             getHistoryItem()
         }
+        binding.btnBackHistory.setOnClickListener {
+            finish()
+        }
     }
 
 

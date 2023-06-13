@@ -15,7 +15,7 @@ import com.futureengineerdev.gubugtani.databinding.ItemPenyakitBinding
 import com.futureengineerdev.gubugtani.response.DataItem
 import com.futureengineerdev.gubugtani.response.DiseaseResponse
 
-class DiseaseAdapter (private val diseaseList: List<DataItem>): RecyclerView.Adapter<DiseaseAdapter.ViewHolder>() {
+class DiseaseAdapter (private var diseaseList: List<DataItem>): RecyclerView.Adapter<DiseaseAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: ItemPenyakitBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(disease: DataItem) {
            with(binding){
@@ -53,6 +53,10 @@ class DiseaseAdapter (private val diseaseList: List<DataItem>): RecyclerView.Ada
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val disease = diseaseList[position]
         holder.bind(disease)
+    }
+    fun submitList(list: List<DataItem>) {
+        diseaseList = list
+        notifyDataSetChanged()
     }
 
 }

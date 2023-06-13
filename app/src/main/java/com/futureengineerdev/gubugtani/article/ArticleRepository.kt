@@ -24,7 +24,7 @@ class ArticleRepository (private val articlesDatabase: ArticlesDatabase, private
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
-                pageSize = 5
+                pageSize = 7
             ),
             remoteMediator = ArticlesRemoteMediator(articlesDatabase, apiService, access_token=access_token,  searchQuery = searchQuery),
             pagingSourceFactory = {

@@ -27,6 +27,9 @@ data class ResultPlantDisease(
 @Parcelize
 data class Detection(
 
+	@field:SerializedName("image")
+	val image: String?,
+
 	@field:SerializedName("result")
 	val result: String?,
 

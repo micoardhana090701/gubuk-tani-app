@@ -31,6 +31,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.futureengineerdev.gubugtani.ChooseActivity
 import com.futureengineerdev.gubugtani.DetailActivity
 import com.futureengineerdev.gubugtani.DiseaseResultActivity
 import com.futureengineerdev.gubugtani.HomeActivity
@@ -191,12 +192,30 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                     val resultIntent = Intent(this, DiseaseResultActivity::class.java)
                     resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it.result?.detection?.result)
                     resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it.result?.detection?.confidence)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_IMAGE, it.result?.detection?.image)
                     startActivity(resultIntent)
                 } else {
-                    val resultIntent = Intent(this, DiseaseResultActivity::class.java)
-                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it?.meta?.message)
-                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it?.meta?.status)
-                    startActivity(resultIntent)
+                    val builder = AlertDialog.Builder(this)
+                    val customLayout : View = layoutInflater.inflate(R.layout.custom_dialog, null)
+                    val errorView : TextView = customLayout.findViewById(R.id.tvWarning)
+                    errorView.setText(it.meta?.message.toString())
+                    if(it.meta?.message == "Kuota Deteksi Penyakit Gratis telah Habis. Nikmati Deteksi Tanpa Batas dengan Melakukan Donasi."){
+                        builder.setView(customLayout)
+                        builder.setPositiveButton("Donasi Sekarang") { dialog: DialogInterface?, which: Int ->
+                            dialog?.dismiss()
+                            showLoading(false)
+                            finish()
+                        }
+                    } else{
+                        builder.setView(customLayout)
+                        builder.setPositiveButton("Ok") { dialog: DialogInterface?, which: Int ->
+                            dialog?.dismiss()
+                            showLoading(false)
+                            finish()
+                        }
+                    }
+                    val dialog = builder.create()
+                    dialog.show()
                 }
                 showLoading(false)
             }catch (e: Exception) {
@@ -205,7 +224,6 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
 
         }
     }
-
 
     private val inCamera = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
