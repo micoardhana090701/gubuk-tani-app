@@ -27,7 +27,7 @@ class CommentAdapter (private val commentList: List<DataItemComment>): RecyclerV
                         .into(ivUserComment)
                 }else{
                     Glide.with(itemView.context)
-                        .load(R.drawable.baseline_person_24)
+                        .load(R.drawable.baseline_account_circle_24)
                         .centerCrop()
                         .into(ivUserComment)
                 }

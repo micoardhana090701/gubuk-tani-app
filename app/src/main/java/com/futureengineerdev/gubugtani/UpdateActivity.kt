@@ -26,6 +26,7 @@ import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
 import com.futureengineerdev.gubugtani.etc.reduceFileImage
 import com.futureengineerdev.gubugtani.etc.uriToFile
+import com.futureengineerdev.gubugtani.ui.profile.ProfileActivity
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
 import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
@@ -75,6 +76,7 @@ class UpdateActivity : AppCompatActivity(){
             if (it != null){
                 Toast.makeText(this, "Akun Telah di Update", Toast.LENGTH_SHORT).show()
                 showLoadingUpdate(false)
+                finish()
             }
         }
 
@@ -117,13 +119,11 @@ class UpdateActivity : AppCompatActivity(){
         }
         getUserDefault()
         binding.btnSendUpdate.setOnClickListener{
-
             lifecycleScope.launch {
                 uploadAll()
                 showLoadingUpdate(true)
             }
         }
-
     }
 
     private suspend fun getUserDefault(){
@@ -183,6 +183,7 @@ class UpdateActivity : AppCompatActivity(){
                     profileViewModel.updateData(username=username, name=name, city=city)
                 }
             }
+
         } catch (e: Exception){
             Log.e("Error", e.toString())
             showLoadingUpdate(false)

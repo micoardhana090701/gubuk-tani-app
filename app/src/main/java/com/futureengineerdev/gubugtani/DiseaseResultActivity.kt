@@ -81,7 +81,7 @@ class DiseaseResultActivity : AppCompatActivity() {
         diseaseViewModel.getDisease(access_token = "Bearer $accessToken")
         diseaseViewModel.disease.observe(this){
             val resultDisease = intent.getStringExtra(DiseaseResultActivity.EXTRA_RESULT)
-            val resultDiseaseResource = "Late Blight"
+            val resultDiseaseResource = resultDisease.toString()
 
             diseaseAdapterInitialize(it.result.data as List<DataItem>)
             filterDisease(resultDiseaseResource)
@@ -89,7 +89,7 @@ class DiseaseResultActivity : AppCompatActivity() {
     }
     private fun filterDisease(query: String) {
         val filteredList = originalDisease.filter { dataItem ->
-            // Sesuaikan dengan kondisi filter yang diinginkan
+
             dataItem.name?.contains(query, ignoreCase = true) == true
         }
         filteredDisease = filteredList

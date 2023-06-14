@@ -49,7 +49,6 @@ class ProfileViewModel(private val preferences: UserPreferences) : ViewModel() {
             override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
                 Log.d(ContentValues.TAG, "onFailure: ${t.message}")
             }
-
         })
 
     }

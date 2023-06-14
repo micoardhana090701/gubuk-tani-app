@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,6 +35,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.futureengineerdev.gubugtani.ChooseActivity
 import com.futureengineerdev.gubugtani.DetailActivity
 import com.futureengineerdev.gubugtani.DiseaseResultActivity
+import com.futureengineerdev.gubugtani.DonateActivity
 import com.futureengineerdev.gubugtani.HomeActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.databinding.ActivityHomeBinding
@@ -195,27 +197,32 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                     resultIntent.putExtra(DiseaseResultActivity.EXTRA_IMAGE, it.result?.detection?.image)
                     startActivity(resultIntent)
                 } else {
-                    val builder = AlertDialog.Builder(this)
-                    val customLayout : View = layoutInflater.inflate(R.layout.custom_dialog, null)
-                    val errorView : TextView = customLayout.findViewById(R.id.tvWarning)
-                    errorView.setText(it.meta?.message.toString())
-                    if(it.meta?.message == "Kuota Deteksi Penyakit Gratis telah Habis. Nikmati Deteksi Tanpa Batas dengan Melakukan Donasi."){
-                        builder.setView(customLayout)
-                        builder.setPositiveButton("Donasi Sekarang") { dialog: DialogInterface?, which: Int ->
-                            dialog?.dismiss()
+                    val dialogBuilder = AlertDialog.Builder(this)
+                    val inflater = layoutInflater
+                    val dialogView = inflater.inflate(R.layout.custom_dialog, null)
+                    dialogBuilder.setView(dialogView)
+
+                    val alertDialog = dialogBuilder.create()
+                    alertDialog.setCancelable(false)
+                    val btnDismiss = dialogView.findViewById<Button>(R.id.btnDialog)
+                    val errorView = dialogView.findViewById<TextView>(R.id.tvWarning)
+                    if (it.meta?.message == "Kuota Deteksi Penyakit Gratis telah Habis. Nikmati Deteksi Tanpa Batas dengan Melakukan Donasi."){
+                        btnDismiss.setText("Berlangganan")
+                        errorView.setText(it.meta?.message.toString())
+                        btnDismiss.setOnClickListener {
+                            alertDialog.dismiss()
                             showLoading(false)
-                            finish()
+                            startActivity(Intent(this, DonateActivity::class.java))
                         }
                     } else{
-                        builder.setView(customLayout)
-                        builder.setPositiveButton("Ok") { dialog: DialogInterface?, which: Int ->
-                            dialog?.dismiss()
+                        btnDismiss.setText("Kembali")
+                        errorView.setText(it.meta?.message.toString())
+                        btnDismiss.setOnClickListener {
+                            alertDialog.dismiss()
                             showLoading(false)
-                            finish()
                         }
                     }
-                    val dialog = builder.create()
-                    dialog.show()
+                    alertDialog.show()
                 }
                 showLoading(false)
             }catch (e: Exception) {

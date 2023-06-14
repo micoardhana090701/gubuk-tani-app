@@ -12,6 +12,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.futureengineerdev.gubugtani.DonateActivity
 import com.futureengineerdev.gubugtani.history.HistoryActivity
 import com.futureengineerdev.gubugtani.LoginActivity
 import com.futureengineerdev.gubugtani.R
@@ -39,7 +40,6 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
-
         lifecycleScope.launch{
             setupViewModel()
         }
@@ -101,7 +101,6 @@ class ProfileActivity : AppCompatActivity() {
                     Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     showLoading(false)
                 }
-
                 else -> {}
             }
         }
@@ -111,6 +110,19 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnHistory.setOnClickListener{
             startActivity(Intent(this, HistoryActivity::class.java))
         }
+        binding.btnDonate.setOnClickListener {
+            startActivity(Intent(this, DonateActivity::class.java))
+        }
+    }
+    private fun refresh(){
+        lifecycleScope.launch{
+            setupViewModel()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refresh()
     }
 
     private fun showLoading(isLoading: Boolean) {

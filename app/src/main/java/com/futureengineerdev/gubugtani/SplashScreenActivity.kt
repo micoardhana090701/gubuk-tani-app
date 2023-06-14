@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -33,6 +35,33 @@ class SplashScreenActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        if (!NetworkUtils.isInternetAvailable(this)) {
+            showNoInternetPopup()
+        } else {
+            startMainScreen()
+        }
+
+
+    }
+
+    private fun showNoInternetPopup() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.item_internet_connection, null)
+        dialogBuilder.setView(dialogView)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.setCancelable(false)
+        val btnDismiss = dialogView.findViewById<Button>(R.id.btnTutup)
+        btnDismiss.setOnClickListener {
+            alertDialog.dismiss()
+            finish()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun startMainScreen() {
         setupViewModel()
         Handler(Looper.getMainLooper()).postDelayed({
             val optionsCompat: ActivityOptionsCompat =

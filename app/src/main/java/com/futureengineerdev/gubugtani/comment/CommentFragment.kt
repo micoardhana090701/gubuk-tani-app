@@ -3,6 +3,7 @@ package com.futureengineerdev.gubugtani.comment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import com.futureengineerdev.gubugtani.viewmodel.AddCommentViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -73,6 +75,14 @@ class CommentFragment : Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 uploadComment()
             }
+            val delayMillis: Long = 2000
+            val handler = Handler()
+            handler.postDelayed({
+                refresh()
+                getCommentViewModel.comment.observe(viewLifecycleOwner) {
+                    autoMaticScroll(comment = it.result?.data as List<DataItemComment>)
+                }
+            }, delayMillis)
         }
     }
 
@@ -90,6 +100,7 @@ class CommentFragment : Fragment() {
                     Toast.makeText(requireContext(), "Komentar berhasil diupload", Toast.LENGTH_SHORT).show()
                     hideKeyboard()
                     binding.etAddComment.text?.clear()
+
                 }
 
             }else{
@@ -97,6 +108,7 @@ class CommentFragment : Fragment() {
                     Toast.makeText(requireContext(), "Komentar tidak boleh kosong", Toast.LENGTH_SHORT).show()
                 }
             }
+
         } catch (e: Exception) {
             Log.e("CommentFragment", "uploadComment: ${e.message}", )
         }
@@ -132,6 +144,10 @@ class CommentFragment : Fragment() {
         swipeRefreshLayout.isRefreshing = false
         val itemCount = commentAdapter.itemCount
         binding.tvItemComment.text = itemCount.toString()
+    }
+    private fun autoMaticScroll(comment: List<DataItemComment>){
+        commentAdapter = CommentAdapter(comment)
+        binding.rvComment.smoothScrollToPosition(commentAdapter.itemCount)
     }
     private fun refresh(){
         viewLifecycleOwner.lifecycleScope.launch {

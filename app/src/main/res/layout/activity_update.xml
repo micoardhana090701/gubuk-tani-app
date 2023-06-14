@@ -7,6 +7,18 @@
     xmlns:icon="http://schemas.android.com/apk/res-auto"
     tools:context=".UpdateActivity">
 
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:layout_margin="24dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_extra_big"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <ImageView
         android:id="@+id/btnUpateBack"
         android:layout_width="32dp"
@@ -24,7 +36,7 @@
         android:layout_margin="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView15">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivFotoUpdate"
@@ -39,12 +51,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_solid"
+            android:padding="5dp"
             android:src="@drawable/outline_camera_alt_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:padding="5dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/button_solid"/>
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.futureengineerdev.gubugtani.component.EditText

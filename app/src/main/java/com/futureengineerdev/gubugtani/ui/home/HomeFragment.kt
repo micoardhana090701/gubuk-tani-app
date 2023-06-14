@@ -89,6 +89,10 @@ class HomeFragment : Fragment() {
         var swipeRefreshLayout = binding.swRefresh
         swipeRefreshLayout.isRefreshing = false
         homeAdapter.refresh()
+        setupViewModel()
+        viewLifecycleOwner.lifecycleScope.launch{
+            setupProfileView(requireView())
+        }
     }
 
     override fun onResume() {
@@ -110,7 +114,6 @@ class HomeFragment : Fragment() {
         profileViewModel.profileUser.observe(viewLifecycleOwner){
             when (it) {
                 is Resource.Success -> {
-                    showLoading(false)
                     if (it != null){
                         binding.tvNamaUserHome.setText(it.data?.result?.user?.name)
                         val ivProfileHome = binding.ivProfileHome
@@ -135,6 +138,7 @@ class HomeFragment : Fragment() {
                             .centerCrop()
                             .into(ivProfileHome)
                     }
+                    showLoading(false)
                 }
                 is Resource.Loading -> {
                     showLoading(true)
@@ -143,8 +147,9 @@ class HomeFragment : Fragment() {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     showLoading(false)
                 }
-
-                else -> {}
+                else -> {
+                    showLoading(false)
+                }
             }
 
         }
