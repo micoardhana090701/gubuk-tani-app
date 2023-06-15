@@ -213,6 +213,7 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                             alertDialog.dismiss()
                             showLoading(false)
                             startActivity(Intent(this, DonateActivity::class.java))
+                            finish()
                         }
                     } else{
                         btnDismiss.setText("Kembali")
@@ -220,6 +221,7 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                         btnDismiss.setOnClickListener {
                             alertDialog.dismiss()
                             showLoading(false)
+                            finish()
                         }
                     }
                     alertDialog.show()

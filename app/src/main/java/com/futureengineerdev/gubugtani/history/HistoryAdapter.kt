@@ -1,9 +1,11 @@
 package com.futureengineerdev.gubugtani.history
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.futureengineerdev.gubugtani.DiseaseResultActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.database.ArticlesWithImages
 import com.futureengineerdev.gubugtani.databinding.ItemHistoryBinding
@@ -30,6 +32,11 @@ class HistoryAdapter(private val historyList: List<DataItemHistory>): RecyclerVi
                         .load(R.drawable.null_pict)
                         .centerCrop()
                         .into(ivUserComment)
+                }
+                root.setOnClickListener{
+                    val historyIntent = Intent(root.context, DetailHistoryActivity::class.java)
+                    historyIntent.putExtra(DetailHistoryActivity.EXTRA_DISEASE_RESULT, history)
+                    root.context.startActivity(historyIntent)
                 }
             }
         }

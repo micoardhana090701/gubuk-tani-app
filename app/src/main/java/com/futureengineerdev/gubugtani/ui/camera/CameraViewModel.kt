@@ -28,9 +28,6 @@ class CameraViewModel(private val preferences: UserPreferences) : ViewModel() {
     private val _uploadDisease = MutableLiveData<PlantDiseaseResponse>()
     val uploadDisease : LiveData<PlantDiseaseResponse> = _uploadDisease
 
-    private val _getDisease = MutableLiveData<Resource<Detection>>()
-    val getDisease : LiveData<Resource<Detection>> = _getDisease
-
 
     suspend fun upload(
         image : MultipartBody.Part?,

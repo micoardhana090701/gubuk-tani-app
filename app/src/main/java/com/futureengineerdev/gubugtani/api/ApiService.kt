@@ -12,6 +12,8 @@ import com.futureengineerdev.gubugtani.response.DiseaseResponse
 import com.futureengineerdev.gubugtani.response.GetCommentResponse
 import com.futureengineerdev.gubugtani.response.HistoryResponse
 import com.futureengineerdev.gubugtani.response.LoginResponse
+import com.futureengineerdev.gubugtani.response.PaymentMethodResponse
+import com.futureengineerdev.gubugtani.response.PaymentResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResponse
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResult
 import com.futureengineerdev.gubugtani.response.PlantDiseaseResultResponse
@@ -118,4 +120,17 @@ interface ApiService {
         @Header("Authorization") access_token: String,
         @Query("user_id") user_id: Int,
     ): HistoryResponse
+
+    @GET("payment_method")
+    suspend fun getPaymentMethod(
+        @Header("Authorization") access_token: String,
+    ): PaymentMethodResponse
+
+    @POST("payment")
+    suspend fun uploadPayment(
+        @Header("Authorization") access_token: String,
+        @Part image : MultipartBody.Part?,
+        @Part("payment_method_id") paymentMethodId: RequestBody,
+        @Part("notes") notes: RequestBody,
+    ): Response<PaymentResponse>
 }
