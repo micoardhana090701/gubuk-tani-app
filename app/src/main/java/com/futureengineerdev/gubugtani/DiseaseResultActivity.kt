@@ -12,14 +12,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.futureengineerdev.gubugtani.article.ArticleAdapter
+import com.futureengineerdev.gubugtani.article.ViewModelArticleFactory
 import com.futureengineerdev.gubugtani.databinding.ActivityDiseaseResultBinding
 import com.futureengineerdev.gubugtani.disease.DiseaseAdapter
 import com.futureengineerdev.gubugtani.disease.DiseaseViewModel
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.response.DataItem
 import com.futureengineerdev.gubugtani.response.DataItemHistory
+import com.futureengineerdev.gubugtani.ui.dashboard.ComunityViewModel
+import com.futureengineerdev.gubugtani.viewmodel.AuthViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -28,11 +33,10 @@ class DiseaseResultActivity : AppCompatActivity() {
 
     private var _binding : ActivityDiseaseResultBinding? = null
     private val binding get() = _binding!!
-    private lateinit var resultDiseaseAdapter: ResultDiseaseAdapter
+    private val articleAdapter = ArticleAdapter()
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_key")
-    private lateinit var diseaseViewModel: DiseaseViewModel
-    private var filteredDisease: List<DataItem> = listOf()
-    private var originalDisease: List<DataItem> = listOf()
+    private lateinit var comunityViewModel: ComunityViewModel
+    private lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +46,7 @@ class DiseaseResultActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         setupViewModel()
+        setupRecyclerView()
 
     }
 
@@ -50,8 +55,10 @@ class DiseaseResultActivity : AppCompatActivity() {
         val resultDisease = intent.getStringExtra(DiseaseResultActivity.EXTRA_RESULT)
         val confidenceDisease = intent.getStringExtra(DiseaseResultActivity.EXTRA_CONFIDENCE)
         val imageDisease = intent.getStringExtra(DiseaseResultActivity.EXTRA_IMAGE)
+        val description = intent.getStringExtra(DiseaseResultActivity.EXTRA_DESCRIPTION_DISEASE)
         binding.tvResultDisease.setText(resultDisease.toString())
         binding.tvAkurasi.setText(confidenceDisease.toString())
+        binding.tvDeskripsiPenangananResult.setText(description.toString())
         Glide.with(this)
             .load("https://app.gubuktani.com/storage/$imageDisease")
             .centerCrop()
@@ -72,48 +79,43 @@ class DiseaseResultActivity : AppCompatActivity() {
             finishAffinity()
         }
         lifecycleScope.launch {
-            diseaseItem()
+            articleItem()
         }
     }
-    private suspend fun diseaseItem(){
+
+    private fun articleItem() {
         val pref = UserPreferences.getInstance(dataStore)
         val viewModelFactory = ViewModelFactory(pref)
         viewModelFactory.setApplication(application)
-        val accessToken = pref.getUserKey().first()
-        diseaseViewModel = ViewModelProvider(this, viewModelFactory)[DiseaseViewModel::class.java]
 
-        diseaseViewModel.getDisease(access_token = "Bearer $accessToken")
-        diseaseViewModel.disease.observe(this){
-            val resultDisease = intent.getStringExtra(DiseaseResultActivity.EXTRA_RESULT)
-            val resultDiseaseResource = resultDisease.toString()
-
-            diseaseAdapterInitialize(it.result.data as List<DataItem>)
-            filterDisease(resultDiseaseResource)
+        authViewModel = ViewModelProvider(this, ViewModelFactory(pref))[AuthViewModel::class.java]
+        comunityViewModel = ViewModelProvider(
+            this,
+            ViewModelArticleFactory(this)
+        )[ComunityViewModel::class.java]
+        val resultDisease = intent.getStringExtra(DiseaseResultActivity.EXTRA_RESULT)
+        val searchQuery = resultDisease.toString()
+        comunityViewModel.getArticle(searchQuery).observe(this) {
+            CoroutineScope(Dispatchers.IO).launch {
+                articleAdapter.submitData(it)
+            }
         }
-    }
-    private fun filterDisease(query: String) {
-        val filteredList = originalDisease.filter { dataItem ->
 
-            dataItem.name?.contains(query, ignoreCase = true) == true
-        }
-        filteredDisease = filteredList
-        resultDiseaseAdapter.submitList(filteredDisease)
     }
-    private fun diseaseAdapterInitialize(disease: List<DataItem>) {
-        originalDisease = disease
-        filteredDisease = disease
-        resultDiseaseAdapter = ResultDiseaseAdapter(disease)
-        binding.rvPenangangan.apply {
+    private fun setupRecyclerView() {
+        with(binding.rvPenangangan){
+            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@DiseaseResultActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = resultDiseaseAdapter
+            adapter = articleAdapter
         }
-        resultDiseaseAdapter.submitList(filteredDisease)
     }
+
 
     companion object{
         const val EXTRA_RESULT = "extra_result"
         const val EXTRA_CONFIDENCE = "extra_confidence"
         const val EXTRA_IMAGE = "extra_image"
+        const val EXTRA_DESCRIPTION_DISEASE = "extra_description_disease"
     }
 
 }

@@ -1,7 +1,6 @@
 package com.futureengineerdev.gubugtani
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.datastore.core.DataStore
@@ -10,21 +9,14 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.futureengineerdev.gubugtani.databinding.ActivityChooseBinding
-import com.futureengineerdev.gubugtani.etc.Resource
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.plant.PlantAdapter
 import com.futureengineerdev.gubugtani.plant.PlantViewModel
 import com.futureengineerdev.gubugtani.response.PlantsItem
-import com.futureengineerdev.gubugtani.ui.camera.CameraFragment
-import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
 import com.futureengineerdev.gubugtani.viewmodel.ViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ChooseActivity : AppCompatActivity() {
 

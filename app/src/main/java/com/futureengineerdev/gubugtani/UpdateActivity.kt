@@ -24,6 +24,7 @@ import com.futureengineerdev.gubugtani.databinding.ActivityUpdateBinding
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.etc.createCustomTempFile
 import com.futureengineerdev.gubugtani.etc.fixImageRotation
+import com.futureengineerdev.gubugtani.etc.isValidEmail
 import com.futureengineerdev.gubugtani.etc.reduceFileImage
 import com.futureengineerdev.gubugtani.etc.uriToFile
 import com.futureengineerdev.gubugtani.ui.profile.ProfileActivity
@@ -160,30 +161,35 @@ class UpdateActivity : AppCompatActivity(){
 
     private suspend fun uploadAll() {
         try{
-            if (getFile != null) {
-                val file = reduceFileImage(getFile as File)
-                val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-                val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-                val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val name = binding.etUsernameUpdate.text.toString()
+            if (isUsernameValid(name)){
+                if (getFile != null) {
+                    val file = reduceFileImage(getFile as File)
+                    val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                    val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                    val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                    val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
 
-                val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                    "avatar",
-                    file.name,
-                    requestImageFile
-                )
-                CoroutineScope(Dispatchers.IO).launch {
-                    profileViewModel.updateAll(imageMultipart=imageMultipart, username=username, name=name, city=city)
+                    val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                        "avatar",
+                        file.name,
+                        requestImageFile
+                    )
+                    CoroutineScope(Dispatchers.IO).launch {
+                        profileViewModel.updateAll(imageMultipart=imageMultipart, username=username, name=name, city=city)
+                    }
+                } else{
+                    val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                    val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                    val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaType())
+                    CoroutineScope(Dispatchers.IO).launch {
+                        profileViewModel.updateData(username=username, name=name, city=city)
+                    }
                 }
             } else{
-                val username = binding.etUsernameUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-                val name = binding.etNamaUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-                val city = binding.etCityUpdate.text.toString().toRequestBody("text/plain".toMediaType())
-                CoroutineScope(Dispatchers.IO).launch {
-                    profileViewModel.updateData(username=username, name=name, city=city)
-                }
+                Toast.makeText(this, "Username Tidak Valid", Toast.LENGTH_SHORT).show()
             }
-
+            showLoadingUpdate(false)
         } catch (e: Exception){
             Log.e("Error", e.toString())
             showLoadingUpdate(false)
@@ -220,4 +226,10 @@ class UpdateActivity : AppCompatActivity(){
         binding.isLoadingUpdating.visibility = if (isLoadingUpdate) View.VISIBLE else View.GONE
         binding.btnSendUpdate.isEnabled = !isLoadingUpdate
     }
+    fun isUsernameValid(username: String): Boolean {
+        val hasUpperCase = username.any { it.isUpperCase() }
+        val hasSpace = username.contains(" ")
+        return !hasUpperCase && !hasSpace
+    }
+
 }

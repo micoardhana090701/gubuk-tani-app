@@ -99,6 +99,7 @@ interface ApiService {
     @GET("disease")
     suspend fun getDisease(
         @Header("Authorization") access_token: String,
+        @Query("tag") tag: String? = null,
     ): DiseaseResponse
 
     @Multipart
@@ -126,6 +127,7 @@ interface ApiService {
         @Header("Authorization") access_token: String,
     ): PaymentMethodResponse
 
+    @Multipart
     @POST("payment")
     suspend fun uploadPayment(
         @Header("Authorization") access_token: String,

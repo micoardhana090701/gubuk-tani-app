@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.futureengineerdev.gubugtani.PaymentActivity
 import com.futureengineerdev.gubugtani.R
 import com.futureengineerdev.gubugtani.databinding.ItemChooseBinding
 import com.futureengineerdev.gubugtani.databinding.ItemPaymentMethodBinding
@@ -23,9 +24,10 @@ class PaymentMethodAdapter (private val methodList: List<PaymentMethodsItem>): R
         fun bind(method: PaymentMethodsItem) {
             with(binding) {
                 methodName.text = method.method
-
                 root.setOnClickListener {
-
+                    val detailIntent = Intent(root.context, PaymentActivity::class.java)
+                    detailIntent.putExtra(PaymentActivity.EXTRA_DATA_PAYMENT, method)
+                    root.context.startActivity(detailIntent)
                 }
             }
 

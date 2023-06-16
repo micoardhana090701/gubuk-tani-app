@@ -195,6 +195,7 @@ class CameraFragment : AppCompatActivity(), View.OnClickListener{
                     resultIntent.putExtra(DiseaseResultActivity.EXTRA_RESULT, it.result?.detection?.result)
                     resultIntent.putExtra(DiseaseResultActivity.EXTRA_CONFIDENCE, it.result?.detection?.confidence)
                     resultIntent.putExtra(DiseaseResultActivity.EXTRA_IMAGE, it.result?.detection?.image)
+                    resultIntent.putExtra(DiseaseResultActivity.EXTRA_DESCRIPTION_DISEASE, it.result.disease?.description)
                     startActivity(resultIntent)
                 } else {
                     val dialogBuilder = AlertDialog.Builder(this)

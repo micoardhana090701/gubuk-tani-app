@@ -8,6 +8,7 @@ import com.futureengineerdev.gubugtani.disease.DiseaseViewModel
 import com.futureengineerdev.gubugtani.etc.UserPreferences
 import com.futureengineerdev.gubugtani.history.HistoryViewModel
 import com.futureengineerdev.gubugtani.payment.PaymentMethodViewModel
+import com.futureengineerdev.gubugtani.payment.PaymentViewModel
 import com.futureengineerdev.gubugtani.plant.PlantViewModel
 import com.futureengineerdev.gubugtani.ui.camera.CameraViewModel
 import com.futureengineerdev.gubugtani.ui.profile.ProfileViewModel
@@ -32,6 +33,7 @@ class ViewModelFactory(private val pref: UserPreferences): ViewModelProvider.New
             AddCommentViewModel::class.java -> AddCommentViewModel(pref) as T
             HistoryViewModel::class.java -> HistoryViewModel(pref) as T
             PaymentMethodViewModel::class.java -> PaymentMethodViewModel(pref) as T
+            PaymentViewModel::class.java -> PaymentViewModel(pref) as T
             else -> throw  IllegalAccessException("Unknown ViewModel class: "+ modelClass.name)
         }
     }

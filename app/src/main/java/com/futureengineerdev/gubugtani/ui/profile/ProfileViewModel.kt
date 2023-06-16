@@ -43,7 +43,11 @@ class ProfileViewModel(private val preferences: UserPreferences) : ViewModel() {
                     }
                 }
                 else{
-                    Log.e("Error: ", "onFailure : ${response.message()}")
+                    val errorResponse = Gson().fromJson(
+                        response.errorBody()?.charStream(),
+                        ProfileResponse::class.java
+                    )
+                    _profileUser.postValue(Resource.Error(errorResponse.toString()))
                 }
             }
             override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {

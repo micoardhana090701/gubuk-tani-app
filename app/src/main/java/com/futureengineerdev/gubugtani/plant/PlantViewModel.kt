@@ -24,7 +24,12 @@ class PlantViewModel(private val preferences: UserPreferences) : ViewModel() {
     suspend fun getPlant(access_token: String){
         viewModelScope.launch {
             ApiConfig.apiInstance.choosingPlant(access_token).let {
-                _plant.postValue(it)
+                if (it !=null){
+                    _plant.postValue(it)
+                }
+                else{
+                    Log.e("Tidak Ada data", "not found")
+                }
             }
         }
     }

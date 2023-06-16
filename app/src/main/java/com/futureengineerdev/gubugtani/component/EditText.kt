@@ -24,10 +24,12 @@ class EditText : AppCompatEditText, View.OnTouchListener {
     private lateinit var usernameInput: Drawable
     private lateinit var cityInput: Drawable
     private lateinit var borderInput: Drawable
+    private lateinit var nameInput: Drawable
     private var inUsername: Boolean = false
     private var inEmail: Boolean = false
     private var inPassword: Boolean = false
     private var inCity: Boolean = false
+    private var inName: Boolean = false
 
     constructor(context: Context) : super(context) {
         init(null)
@@ -58,6 +60,7 @@ class EditText : AppCompatEditText, View.OnTouchListener {
 
         inEmail = cons.getBoolean(R.styleable.EditText_email, false)
         inPassword = cons.getBoolean(R.styleable.EditText_password, false)
+        inName = cons.getBoolean(R.styleable.EditText_name, false)
         inUsername = cons.getBoolean(R.styleable.EditText_username, false)
         inCity = cons.getBoolean(R.styleable.EditText_city, false)
         borderInput = ContextCompat.getDrawable(context, R.drawable.border_input) as Drawable
@@ -68,6 +71,7 @@ class EditText : AppCompatEditText, View.OnTouchListener {
         usernameInput =
             ContextCompat.getDrawable(context, R.drawable.baseline_person_24) as Drawable
         cityInput = ContextCompat.getDrawable(context, R.drawable.outline_city_24) as Drawable
+        nameInput = ContextCompat.getDrawable(context, R.drawable.baseline_person_24) as Drawable
 
         if (inEmail) {
             setButton(startOfTheText = emailInput)
@@ -75,8 +79,10 @@ class EditText : AppCompatEditText, View.OnTouchListener {
             setButton(startOfTheText = passwordInput)
         } else if (inUsername) {
             setButton(startOfTheText = usernameInput)
-        }else if (inCity) {
+        } else if (inCity) {
             setButton(startOfTheText = cityInput)
+        } else if (inName){
+            setButton(startOfTheText = nameInput)
         }
         setOnTouchListener(this)
 
@@ -87,8 +93,9 @@ class EditText : AppCompatEditText, View.OnTouchListener {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val input = s.toString()
-                val errorEmail = "Your Email Format Is Wrong"
-                val errorPassword = "8 minimum character"
+                val errorEmail = "Format Email Salah"
+                val errorPassword = "Password Minimal 8 karakter"
+                val errorUsername = "Username tidak boleh menggunakan spasi dan huruf kapital"
 
                 if(s.toString().isNotEmpty()) showClearButton() else hideClearButton()
                 error =
@@ -96,7 +103,10 @@ class EditText : AppCompatEditText, View.OnTouchListener {
                         errorPassword
                     } else if (inEmail && !input.isValidEmail()) {
                         errorEmail
-                    } else {
+                    } else if (inUsername && !input.isUsernameValid(input)){
+                        errorUsername
+                    }
+                    else {
                         null
                     }
             }
@@ -177,6 +187,7 @@ class EditText : AppCompatEditText, View.OnTouchListener {
             inPassword -> setButton(startOfTheText = passwordInput)
             inUsername -> setButton(startOfTheText = usernameInput)
             inCity ->setButton(startOfTheText = cityInput)
+            inName -> setButton(startOfTheText = nameInput)
             else -> setButton()
         }
     }
@@ -195,8 +206,22 @@ class EditText : AppCompatEditText, View.OnTouchListener {
                 startOfTheText = usernameInput,
                 endOfTheText = clearInput
             )
+            inCity -> setButton(
+                startOfTheText = cityInput,
+                endOfTheText = clearInput
+            )
+            inName -> setButton(
+                startOfTheText = nameInput,
+                endOfTheText = clearInput
+            )
             else -> setButton(endOfTheText = clearInput)
         }
+    }
+
+    fun String.isUsernameValid(username: String): Boolean {
+        val hasUpperCase = username.any { it.isUpperCase() }
+        val hasSpace = username.contains(" ")
+        return !hasUpperCase && !hasSpace
     }
 
     fun String.isValidEmail(): Boolean {

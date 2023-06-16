@@ -43,6 +43,9 @@ data class User(
 	@field:SerializedName("disabled_at")
 	val disabledAt: String?,
 
+	@field:SerializedName("type")
+	val type: String?,
+
 	@field:SerializedName("created_at")
 	val createdAt: String?,
 

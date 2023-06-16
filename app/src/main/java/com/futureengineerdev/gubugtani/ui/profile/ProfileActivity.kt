@@ -83,6 +83,13 @@ class ProfileActivity : AppCompatActivity() {
                                 .centerCrop()
                                 .into(ivFotoProfile)
                         }
+                        if(it.data?.result?.user?.type == "premium"){
+                            binding.ivPremium.visibility = View.VISIBLE
+                            binding.btnDonate.visibility = View.GONE
+                        } else{
+                            binding.ivPremium.visibility = View.GONE
+                            binding.btnDonate.visibility = View.VISIBLE
+                        }
                     }
                     else{
                         val ivFotoProfile = binding.ivFotoProfil

@@ -16,7 +16,7 @@ class DiseaseViewModel(private val preferences: UserPreferences): ViewModel() {
 
     suspend fun getDisease(access_token: String) {
         viewModelScope.launch {
-            ApiConfig.apiInstance.getDisease(access_token).let {
+            ApiConfig.apiInstance.getDisease(access_token, tag = null).let {
                 _disease.postValue(it)
             }
         }

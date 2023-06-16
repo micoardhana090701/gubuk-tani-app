@@ -110,16 +110,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
+            <TextView
+                android:id="@+id/tvDeskripsiPenangananResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:text="ini adalah deskripsi artikel"
+                app:layout_constraintTop_toBottomOf="@+id/textView12"
+                tools:layout_editor_absoluteX="24dp" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Artikel Terkait"
+                android:textColor="@color/black"
+                android:layout_margin="24dp"
+                android:textSize="@dimen/text_big"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDeskripsiPenangananResult" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPenangangan"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                app:layout_constraintTop_toBottomOf="@+id/textView19" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

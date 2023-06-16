@@ -20,8 +20,8 @@ data class ResultPlantDisease(
 	@field:SerializedName("detection")
 	val detection: Detection?,
 
-//	@field:SerializedName("disease")
-//	val disease: String? = null
+	@field:SerializedName("disease")
+	val disease: Disease?,
 ) : Parcelable
 
 @Parcelize
@@ -37,6 +37,14 @@ data class Detection(
 	val confidence: String?,
 
 ) : Parcelable
+
+@Parcelize
+data class Disease(
+	@field:SerializedName("name")
+	val name: String?,
+	@field:SerializedName("description")
+	val description : String?
+): Parcelable
 
 @Parcelize
 data class MetaPlantDisease(
