@@ -58,7 +58,13 @@ class DiseaseResultActivity : AppCompatActivity() {
         val description = intent.getStringExtra(DiseaseResultActivity.EXTRA_DESCRIPTION_DISEASE)
         binding.tvResultDisease.setText(resultDisease.toString())
         binding.tvAkurasi.setText(confidenceDisease.toString())
-        binding.tvDeskripsiPenangananResult.setText(description.toString())
+
+        if(description == null){
+            binding.tvDeskripsiPenangananResult.setText("tidak ada data")
+        } else{
+            binding.tvDeskripsiPenangananResult.setText(description.toString())
+        }
+        
         Glide.with(this)
             .load("https://app.gubuktani.com/storage/$imageDisease")
             .centerCrop()
