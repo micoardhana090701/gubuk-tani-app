@@ -33,19 +33,18 @@
                 android:layout_margin="24dp"
                 app:cardBackgroundColor="@color/text_80"
                 app:cardCornerRadius="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/ivGambarHistory"
-                tools:layout_editor_absoluteX="24dp">
+                app:layout_constraintTop_toBottomOf="@+id/ivGambarHistory">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp">
 
                     <ImageView
                         android:id="@+id/imageView4"
                         android:layout_width="42dp"
                         android:layout_height="42dp"
-                        android:layout_margin="24dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_margin="7dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,24 +53,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="7dp"
-                        android:layout_marginTop="24dp"
                         android:text="Penyakit anda "
                         android:textSize="@dimen/text_small"
                         app:layout_constraintStart_toEndOf="@+id/imageView4"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@+id/imageView4" />
 
                     <TextView
                         android:id="@+id/tvResultHistory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="24dp"
                         android:text="Nama Penyakit"
                         android:textColor="@color/black"
+                        android:layout_marginStart="7dp"
                         android:textSize="@dimen/text_small"
                         android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@+id/textView10"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toEndOf="@+id/imageView4"
+                        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
                     <TextView
                         android:id="@+id/textView9"
@@ -80,6 +77,7 @@
                         android:layout_margin="7dp"
                         android:text="Akurasi"
                         android:textSize="@dimen/text_small"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageView4"
                         app:layout_constraintTop_toBottomOf="@+id/tvResultHistory" />
 
@@ -92,6 +90,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_small"
                         android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView9"
                         app:layout_constraintTop_toBottomOf="@+id/tvResultHistory" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

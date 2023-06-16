@@ -64,7 +64,7 @@ class DiseaseResultActivity : AppCompatActivity() {
         } else{
             binding.tvDeskripsiPenangananResult.setText(description.toString())
         }
-        
+
         Glide.with(this)
             .load("https://app.gubuktani.com/storage/$imageDisease")
             .centerCrop()
@@ -74,6 +74,7 @@ class DiseaseResultActivity : AppCompatActivity() {
             binding.imageView4.setImageResource(R.drawable.outline_check_circle_24)
             binding.textView10.setText("Tanaman Anda")
             binding.textView12.visibility = View.GONE
+            binding.tvDeskripsiPenangananResult.visibility = View.GONE
         } else{
             binding.imageView4.setImageResource(R.drawable.outline_warning_amber_24)
             binding.textView10.setText("Penyakit Tanaman Anda")
