@@ -7,7 +7,7 @@
 
 
 ## Dokumentasi
-Berikut merupakan prototype dari aplikasi YurSayur [Figma Prototype YurSayur](https://www.figma.com/file/NsP0CKkswRmWzyE1JMHUki/Prototype-Capstone-Project?type=design&node-id=0%3A1&mode=design&t=gOgWZ42D83Q5Ibj6-1).
+Berikut merupakan prototype dari aplikasi gubuk tani [Figma Prototype Gubuk Tani](https://www.figma.com/file/NsP0CKkswRmWzyE1JMHUki/Prototype-Capstone-Project?type=design&node-id=0%3A1&mode=design&t=gOgWZ42D83Q5Ibj6-1).
 
 
 ## Requirement
